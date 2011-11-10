@@ -1,0 +1,17 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" ctype="Workspace" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="mLedMatrix/MainWindow.cs" ctype="Workbench">
+    <Files>
+      <File FileName="../gledmatrix/src/led_routines.c" Line="378" Column="21" />
+      <File FileName="../gledmatrix/src/led_routines.h" Line="31" Column="1" />
+      <File FileName="mLedMatrix/Main.cs" Line="1" Column="12" />
+      <File FileName="mLedMatrix/LedMatrix.cs" Line="55" Column="20" />
+      <File FileName="mLedMatrix/MainWindow.cs" Line="32" Column="45" />
+      <File FileName="mLedMatrix/fonts/8x12.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches ctype="PinnedWatchStore" />
+</Properties>
