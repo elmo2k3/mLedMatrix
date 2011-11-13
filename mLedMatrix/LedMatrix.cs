@@ -41,6 +41,9 @@ public class LedMatrix
 	public volatile screen current_screen;
 	public volatile int static_text_x, static_text_y;
 	Fonts font;
+	public volatile string fontname;
+	public volatile string fontname_time;
+	public volatile string fontname_static_text;
 	bool shift_override;
 	bool shift_active_static;
 	bool must_update;
@@ -69,9 +72,11 @@ public class LedMatrix
 		x = 0;
 		y = -2;
 		static_text_x = 0;
-		static_text_y = -2;
+		static_text_y = 1;
 		scroll_speed = 10;
 		current_screen = screen.time;
+		fontname_time = "8x12";
+		fontname_static_text = "8x12";
 		
 		remoteEndPoint = new IPEndPoint(IPAddress.Parse(address), 9328);
 		client = new UdpClient();
@@ -82,9 +87,9 @@ public class LedMatrix
 	{
 		string time_string;
 		DateTime CurrTime = DateTime.Now;
-		x = 0; y = -2;
+		x = 0; y = 3;
 		time_string = String.Format("  {0:00}:{1:00}:{2:00}",CurrTime.Hour,CurrTime.Minute,CurrTime.Second);
-		putString(time_string);
+		putString(time_string, fontname_time);
 		return true;
 	}
 	
@@ -107,7 +112,6 @@ public class LedMatrix
 			led_columns_green_out[i] = 0;
 		}
 	}
-		
 	
 	public void Runner()
 	{
@@ -133,7 +137,8 @@ public class LedMatrix
 					clearScreen();
 					x = static_text_x;
 					y = static_text_y;
-					putString(static_text);
+					fontname = "8x8";
+					putString(static_text, fontname_static_text);
 					must_update = true;
 					break;
 				case screen.all_on:
@@ -284,13 +289,9 @@ public class LedMatrix
 		mutex_address.ReleaseMutex();
 	}
 	
-	private bool putChar(char c, colors color)
+	private bool putChar(char c, colors color, string fontname)
 	{
-		int char_width = font.font8x12[256*16+0];
-	    int char_height = font.font8x12[256*16+1];
-	
-	    int i;
-	
+		int retVal = 0;
 	    if(c == '\n')
 	    {
 	       	x = 0;
@@ -303,75 +304,24 @@ public class LedMatrix
 	        return true;
 	    }
 	    
-	    if((x + char_width) >= 512-50)
-	    {
-	        return false;
-	    }
-	    
-	    if(char_height > 8)
-	    {
-	        for(i=0;i<char_width;i++)
-	        {
-	            if(color == colors.red)
-	            {
-	                if(y > 0)
-	                    led_columns_red[i+x] |= (UInt16)(font.font8x12[(int)c*16+i*2]<<y & (0xFF<<y));
-	                else
-	                    led_columns_red[i+x] |= (UInt16)(font.font8x12[(int)c*16+i*2]>>-y & (0xFF>>-y));
-	                led_columns_red[i+x] |= (UInt16)(font.font8x12[(int)c*16+i*2+1]<<(y+8) & (0xFF<<(y+8)));
-	            }
-	            else if(color == colors.green)
-	            {
-	                if(y > 0)
-	                    led_columns_green[i+x] |= (UInt16)(font.font8x12[(int)c*16+i*2]<<y & (0xFF<<y));
-	                else
-	                    led_columns_green[i+x] |= (UInt16)(font.font8x12[(int)c*16+i*2]>>-y & (0xFF>>-y));
-	                led_columns_green[i+x] |= (UInt16)(font.font8x12[(int)c*16+i*2+1]<<(y+8) & (0xFF<<(y+8)));
-	            }
-	            else if(color == colors.amber)
-	            {
-	                if(y > 0)
-	                    led_columns_red[i+x] |= (UInt16)(font.font8x12[(int)c*16+i*2]<<y & (0xFF<<y));
-	                else
-	                    led_columns_red[i+x] |= (UInt16)(font.font8x12[(int)c*16+i*2]>>-y & (0xFF>>-y));
-	                led_columns_red[i+x] |= (UInt16)(font.font8x12[(int)c*16+i*2+1]<<(y+8) & (0xFF<<(y+8)));
-	                if(y > 0)
-	                    led_columns_green[i+x] |= (UInt16)(font.font8x12[(int)c*16+i*2]<<y & (0xFF<<y));
-	                else
-	                    led_columns_green[i+x] |= (UInt16)(font.font8x12[(int)c*16+i*2]>>-y & (0xFF>>-y));
-	                led_columns_green[i+x] |= (UInt16)(font.font8x12[(int)c*16+i*2+1]<<(y+8) & (0xFF<<(y+8)));
-	            }
-	            if(font.font8x12[(int)c*16+i*2] == 0 && font.font8x12[(int)c*16+i*2+1] == 0)
-	                x -=1;
-	        }
-	    }
-	    else
-	    {
-	        /*for(i=0;i<char_width;i++)
-	        {
-	            if(color == red)
-	            {
-	                led_columns_red[i+ledLine->x] |= font[(int)c][i]<<ledLine->y & (0xFF<<ledLine->y);
-	            }
-	            else if(color == green)
-	            {
-	                led_columns_green[i+ledLine->x] |= font[(int)c][i]<<ledLine->y & (0xFF<<ledLine->y);
-	            }
-	            else if(color == amber)
-	            {
-	                led_columns_red[i+ledLine->x] |= font[(int)c][i]<<ledLine->y & (0xFF<<ledLine->y);
-	                led_columns_green[i+ledLine->x] |= font[(int)c][i]<<ledLine->y & (0xFF<<ledLine->y);
-	            }
-	            if(font[(int)c][i] == 0)
-	                ledLine->x -=1;
-	        }*/
-	    }
-	
-	    x += char_width+1;
+		if(color == colors.red)
+	    	retVal = font.putChar(ref led_columns_red, ref x, ref y, c, fontname);
+		else if(color == colors.green)
+	    	retVal = font.putChar(ref led_columns_green, ref x, ref y, c, fontname);
+		else if(color == colors.amber)
+		{
+	    	retVal = font.putChar(ref led_columns_red, ref x, ref y, c, fontname);
+			retVal = font.putChar(ref led_columns_green, ref x, ref y, c, fontname);
+		}
+
+		if(retVal == 0)
+			return false;
+		
+		x += retVal+1;
 	    return true;
 	}
 	
-	public void putString(string outstring)
+	public void putString(string outstring, string fontname)
 	{
 		char [] outarray;
 		if(outstring == null)
@@ -381,7 +331,7 @@ public class LedMatrix
 
 		for(int i=0;i<outarray.Length;i++)
 	    {
-	        if(!putChar(outarray[i],color))
+	        if(!putChar(outarray[i],color,fontname))
 	        {
 	            return;
 	        }

@@ -56,6 +56,7 @@ public partial class MainWindow : Gtk.Window
 			led_matrix.current_screen = screen.all_on;
 		}
 		entry_address.Text = led_matrix_address;
+		entry_static_text.Text = (string)softwareKey.GetValue("static_text");
 	}
 	
 	private void saveConfig()
@@ -140,12 +141,20 @@ public partial class MainWindow : Gtk.Window
 		led_matrix.current_screen = screen.all_on;
 	}
 	
+	protected void on_combobox_font_time_changed (object sender, System.EventArgs e)
+	{
+		if(combobox_font_time.ActiveText == "Font8x12")
+			led_matrix.fontname_time = "8x12";
+		else if(combobox_font_time.ActiveText == "Font8x8")
+			led_matrix.fontname_time = "8x8";
+	}
 	
-	
-	
-	
-	
-	
-	
+	protected void on_combobox_font_static_text_changed (object sender, System.EventArgs e)
+	{
+		if(combobox_font_static_text.ActiveText == "Font8x12")
+			led_matrix.fontname_static_text = "8x12";
+		else if(combobox_font_static_text.ActiveText == "Font8x8")
+			led_matrix.fontname_static_text = "8x8";
+	}
 }
 

@@ -6,16 +6,9 @@
   </configuration>
   <import>
     <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <widget-library name="../bin/Debug/testprojekt1.exe" internal="true" />
+    <widget-library name="../bin/Release/testprojekt1.exe" internal="true" />
   </import>
-  <icon-factory>
-    <icon-set id="LM">
-      <source>
-        <property name="Image">file:./icon.png</property>
-      </source>
-    </icon-set>
-  </icon-factory>
-  <widget class="Gtk.Window" id="MainWindow" design-size="414 458">
+  <widget class="Gtk.Window" id="MainWindow" design-size="414 498">
     <property name="MemberName" />
     <property name="Title" translatable="yes">MainWindow</property>
     <property name="WindowPosition">CenterOnParent</property>
@@ -127,20 +120,82 @@
                       <placeholder />
                     </child>
                     <child>
-                      <placeholder />
+                      <widget class="Gtk.ComboBox" id="combobox_font_static_text">
+                        <property name="MemberName" />
+                        <property name="IsTextCombo">True</property>
+                        <property name="Items" translatable="yes">Font8x12
+Font8x8</property>
+                        <property name="Active">0</property>
+                        <signal name="Changed" handler="on_combobox_font_static_text_changed" />
+                      </widget>
+                      <packing>
+                        <property name="TopAttach">3</property>
+                        <property name="BottomAttach">4</property>
+                        <property name="LeftAttach">1</property>
+                        <property name="RightAttach">2</property>
+                        <property name="AutoSize">True</property>
+                        <property name="XOptions">Fill</property>
+                        <property name="YOptions">Fill</property>
+                        <property name="XExpand">False</property>
+                        <property name="XFill">True</property>
+                        <property name="XShrink">False</property>
+                        <property name="YExpand">False</property>
+                        <property name="YFill">True</property>
+                        <property name="YShrink">False</property>
+                      </packing>
                     </child>
                     <child>
-                      <placeholder />
+                      <widget class="Gtk.ComboBox" id="combobox_font_time">
+                        <property name="MemberName" />
+                        <property name="IsTextCombo">True</property>
+                        <property name="Items" translatable="yes">Font8x12
+Font8x8</property>
+                        <property name="Active">0</property>
+                        <signal name="Changed" handler="on_combobox_font_time_changed" />
+                      </widget>
+                      <packing>
+                        <property name="LeftAttach">1</property>
+                        <property name="RightAttach">2</property>
+                        <property name="AutoSize">True</property>
+                        <property name="XOptions">Fill</property>
+                        <property name="YOptions">Fill</property>
+                        <property name="XExpand">False</property>
+                        <property name="XFill">True</property>
+                        <property name="XShrink">False</property>
+                        <property name="YExpand">False</property>
+                        <property name="YFill">True</property>
+                        <property name="YShrink">False</property>
+                      </packing>
                     </child>
                     <child>
-                      <placeholder />
+                      <widget class="Gtk.ComboBox" id="combobox3">
+                        <property name="MemberName" />
+                        <property name="IsTextCombo">True</property>
+                        <property name="Items" translatable="yes">Font8x12
+Font8x8</property>
+                        <property name="Active">0</property>
+                      </widget>
+                      <packing>
+                        <property name="TopAttach">1</property>
+                        <property name="BottomAttach">2</property>
+                        <property name="LeftAttach">1</property>
+                        <property name="RightAttach">2</property>
+                        <property name="AutoSize">True</property>
+                        <property name="XOptions">Fill</property>
+                        <property name="YOptions">Fill</property>
+                        <property name="XExpand">False</property>
+                        <property name="XFill">True</property>
+                        <property name="XShrink">False</property>
+                        <property name="YExpand">False</property>
+                        <property name="YFill">True</property>
+                        <property name="YShrink">False</property>
+                      </packing>
                     </child>
                     <child>
                       <widget class="Gtk.RadioButton" id="radiobutton_all">
                         <property name="MemberName" />
                         <property name="CanFocus">True</property>
                         <property name="Label" translatable="yes">Alles an</property>
-                        <property name="Active">True</property>
                         <property name="DrawIndicator">True</property>
                         <property name="HasLabel">True</property>
                         <property name="UseUnderline">True</property>

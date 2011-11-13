@@ -71,7 +71,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="LedMatrix.cs" />
-    <Compile Include="fonts\8x12.cs" />
+    <Compile Include="fonts\Fonts.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
