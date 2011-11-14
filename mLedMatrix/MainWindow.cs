@@ -101,11 +101,6 @@ public partial class MainWindow : Gtk.Window
 	{
 	}
 	
-	protected virtual void on_hscale_x_pos_changed (object sender, System.EventArgs e)
-	{
-		led_matrix.static_text_x = (int)hscale_x_pos.Value;
-	}
-	
 	protected virtual void radiobutton_time_toggled (object sender, System.EventArgs e)
 	{
 		led_matrix.current_screen = screen.time;
@@ -129,11 +124,19 @@ public partial class MainWindow : Gtk.Window
 	protected virtual void on_entry_static_text_changed (object sender, System.EventArgs e)
 	{
 		led_matrix.static_text = entry_static_text.Text;
+		led_matrix.force_redraw = true;
+	}
+		
+	protected virtual void on_hscale_x_pos_changed (object sender, System.EventArgs e)
+	{
+		led_matrix.static_text_x = (int)hscale_x_pos.Value;
+		led_matrix.force_redraw = true;
 	}
 	
 	protected virtual void on_vscale_y_pos_changed (object sender, System.EventArgs e)
 	{
 		led_matrix.static_text_y = (int)vscale_y_pos.Value;
+		led_matrix.force_redraw = true;
 	}
 	
 	protected virtual void on_radiobutton_all_toggled (object sender, System.EventArgs e)
@@ -147,6 +150,7 @@ public partial class MainWindow : Gtk.Window
 			led_matrix.fontname_time = "8x12";
 		else if(combobox_font_time.ActiveText == "Font8x8")
 			led_matrix.fontname_time = "8x8";
+		
 	}
 	
 	protected void on_combobox_font_static_text_changed (object sender, System.EventArgs e)
@@ -155,6 +159,14 @@ public partial class MainWindow : Gtk.Window
 			led_matrix.fontname_static_text = "8x12";
 		else if(combobox_font_static_text.ActiveText == "Font8x8")
 			led_matrix.fontname_static_text = "8x8";
+		led_matrix.force_redraw = true;
+	}
+
+	protected void on_togglebutton_static_text_auto_scroll_toggled (object sender, System.EventArgs e)
+	{
+		led_matrix.shift_auto_enabled = checkbutton_static_text_auto_scroll.Active;
+		led_matrix.force_redraw = true;
+		//throw new System.NotImplementedException ();
 	}
 }
 

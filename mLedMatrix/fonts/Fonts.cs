@@ -591,4 +591,68 @@ public class Fonts
 		}
 		return real_length-zero_offset;
 	}
+	
+	private int charWidth(char c, font fontPointer)
+	{
+		int i;
+		int char_width;
+	    int char_height;
+		int real_length;
+		int zero_offset;
+		
+		char_width = fontPointer.width;
+		char_height = fontPointer.heigth;
+		zero_offset = 0;
+		real_length = char_width;
+		
+		if(char_height > 8)
+	    {
+			zero_offset = 0;
+			while((fontPointer.data[(int)c*16+zero_offset*2] == 0) &&
+			      (fontPointer.data[(int)c*16+zero_offset*2+1] == 0))
+				zero_offset++;
+	        for(i=0;i<char_width-zero_offset;i++)
+	        {
+	            if(font8x12.data[(int)c*16+(i+zero_offset)*2] == 0 && 
+					fontPointer.data[(int)c*16+(i+zero_offset)*2+1] == 0)
+	                real_length--;
+	        }
+	    }
+		else
+		{
+			zero_offset = 0;
+			while(fontPointer.data[(int)c*8+zero_offset] == 0)
+				zero_offset++;
+			for(i=0;i<char_width-zero_offset;i++)
+	        {
+				if(fontPointer.data[(int)c*8+i+zero_offset] == 0)
+	                real_length--;
+			}
+		}
+		return real_length-zero_offset;
+	}
+	
+	public int stringWidth(string s, string font_name)
+	{
+	    int width = 0;
+		char []outarray;
+		
+		font fontPointer = font8x12;
+		
+		if(font_name == "8x12")
+			fontPointer = font8x12;
+		else if(font_name == "8x8")
+			fontPointer = font8x8;
+		
+	    if(s == null)
+	        outarray = "null".ToCharArray();
+		else
+			outarray = s.ToCharArray();
+		
+		for(int i=0;i<outarray.Length;i++)
+	    {
+	        width += charWidth(s[i], fontPointer)+1;
+	    }
+	    return width - 1; // undo last +1
+	}
 }

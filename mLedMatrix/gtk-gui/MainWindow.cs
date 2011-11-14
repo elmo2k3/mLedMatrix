@@ -30,10 +30,15 @@ public partial class MainWindow
 	private global::Gtk.HBox hbox3;
 	private global::Gtk.Alignment GtkAlignment2;
 	private global::Gtk.Entry entry_static_text;
+	private global::Gtk.CheckButton checkbutton_static_text_auto_scroll;
 	private global::Gtk.HScale hscale_x_pos;
 	private global::Gtk.Label GtkLabel8;
 	private global::Gtk.VScale vscale_y_pos;
+	private global::Gtk.VBox vbox3;
+	private global::Gtk.Frame frame4;
+	private global::Gtk.Alignment GtkAlignment3;
 	private global::Gtk.HScale hscale_shift_speed;
+	private global::Gtk.Label GtkLabel9;
 	
 	protected virtual void Build ()
 	{
@@ -260,11 +265,21 @@ public partial class MainWindow
 		this.hbox3.Add (this.GtkAlignment2);
 		global::Gtk.Box.BoxChild w19 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.GtkAlignment2]));
 		w19.Position = 0;
+		// Container child hbox3.Gtk.Box+BoxChild
+		this.checkbutton_static_text_auto_scroll = new global::Gtk.CheckButton ();
+		this.checkbutton_static_text_auto_scroll.CanFocus = true;
+		this.checkbutton_static_text_auto_scroll.Name = "checkbutton_static_text_auto_scroll";
+		this.checkbutton_static_text_auto_scroll.Label = global::Mono.Unix.Catalog.GetString ("Auto Scroll");
+		this.checkbutton_static_text_auto_scroll.DrawIndicator = true;
+		this.checkbutton_static_text_auto_scroll.UseUnderline = true;
+		this.hbox3.Add (this.checkbutton_static_text_auto_scroll);
+		global::Gtk.Box.BoxChild w20 = ((global::Gtk.Box.BoxChild)(this.hbox3 [this.checkbutton_static_text_auto_scroll]));
+		w20.Position = 1;
 		this.vbox99.Add (this.hbox3);
-		global::Gtk.Box.BoxChild w20 = ((global::Gtk.Box.BoxChild)(this.vbox99 [this.hbox3]));
-		w20.Position = 0;
-		w20.Expand = false;
-		w20.Fill = false;
+		global::Gtk.Box.BoxChild w21 = ((global::Gtk.Box.BoxChild)(this.vbox99 [this.hbox3]));
+		w21.Position = 0;
+		w21.Expand = false;
+		w21.Fill = false;
 		// Container child vbox99.Gtk.Box+BoxChild
 		this.hscale_x_pos = new global::Gtk.HScale (null);
 		this.hscale_x_pos.CanFocus = true;
@@ -276,10 +291,10 @@ public partial class MainWindow
 		this.hscale_x_pos.Digits = 0;
 		this.hscale_x_pos.ValuePos = ((global::Gtk.PositionType)(2));
 		this.vbox99.Add (this.hscale_x_pos);
-		global::Gtk.Box.BoxChild w21 = ((global::Gtk.Box.BoxChild)(this.vbox99 [this.hscale_x_pos]));
-		w21.Position = 1;
-		w21.Expand = false;
-		w21.Fill = false;
+		global::Gtk.Box.BoxChild w22 = ((global::Gtk.Box.BoxChild)(this.vbox99 [this.hscale_x_pos]));
+		w22.Position = 1;
+		w22.Expand = false;
+		w22.Fill = false;
 		this.frame3.Add (this.vbox99);
 		this.GtkLabel8 = new global::Gtk.Label ();
 		this.GtkLabel8.Name = "GtkLabel8";
@@ -287,10 +302,10 @@ public partial class MainWindow
 		this.GtkLabel8.UseMarkup = true;
 		this.frame3.LabelWidget = this.GtkLabel8;
 		this.hbox1.Add (this.frame3);
-		global::Gtk.Box.BoxChild w23 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.frame3]));
-		w23.Position = 0;
-		w23.Expand = false;
-		w23.Fill = false;
+		global::Gtk.Box.BoxChild w24 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.frame3]));
+		w24.Position = 0;
+		w24.Expand = false;
+		w24.Fill = false;
 		// Container child hbox1.Gtk.Box+BoxChild
 		this.vscale_y_pos = new global::Gtk.VScale (null);
 		this.vscale_y_pos.CanFocus = true;
@@ -303,16 +318,28 @@ public partial class MainWindow
 		this.vscale_y_pos.Digits = 0;
 		this.vscale_y_pos.ValuePos = ((global::Gtk.PositionType)(2));
 		this.hbox1.Add (this.vscale_y_pos);
-		global::Gtk.Box.BoxChild w24 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.vscale_y_pos]));
-		w24.Position = 1;
-		w24.Expand = false;
-		w24.Fill = false;
-		this.vbox98.Add (this.hbox1);
-		global::Gtk.Box.BoxChild w25 = ((global::Gtk.Box.BoxChild)(this.vbox98 [this.hbox1]));
-		w25.Position = 0;
+		global::Gtk.Box.BoxChild w25 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.vscale_y_pos]));
+		w25.Position = 1;
 		w25.Expand = false;
 		w25.Fill = false;
+		this.vbox98.Add (this.hbox1);
+		global::Gtk.Box.BoxChild w26 = ((global::Gtk.Box.BoxChild)(this.vbox98 [this.hbox1]));
+		w26.Position = 0;
+		w26.Expand = false;
+		w26.Fill = false;
 		// Container child vbox98.Gtk.Box+BoxChild
+		this.vbox3 = new global::Gtk.VBox ();
+		this.vbox3.Name = "vbox3";
+		this.vbox3.Spacing = 6;
+		// Container child vbox3.Gtk.Box+BoxChild
+		this.frame4 = new global::Gtk.Frame ();
+		this.frame4.Name = "frame4";
+		this.frame4.ShadowType = ((global::Gtk.ShadowType)(0));
+		// Container child frame4.Gtk.Container+ContainerChild
+		this.GtkAlignment3 = new global::Gtk.Alignment (0F, 0F, 1F, 1F);
+		this.GtkAlignment3.Name = "GtkAlignment3";
+		this.GtkAlignment3.LeftPadding = ((uint)(12));
+		// Container child GtkAlignment3.Gtk.Container+ContainerChild
 		this.hscale_shift_speed = new global::Gtk.HScale (null);
 		this.hscale_shift_speed.CanFocus = true;
 		this.hscale_shift_speed.Name = "hscale_shift_speed";
@@ -322,22 +349,30 @@ public partial class MainWindow
 		this.hscale_shift_speed.DrawValue = true;
 		this.hscale_shift_speed.Digits = 0;
 		this.hscale_shift_speed.ValuePos = ((global::Gtk.PositionType)(2));
-		this.vbox98.Add (this.hscale_shift_speed);
-		global::Gtk.Box.BoxChild w26 = ((global::Gtk.Box.BoxChild)(this.vbox98 [this.hscale_shift_speed]));
-		w26.Position = 1;
-		w26.Expand = false;
-		w26.Fill = false;
+		this.GtkAlignment3.Add (this.hscale_shift_speed);
+		this.frame4.Add (this.GtkAlignment3);
+		this.GtkLabel9 = new global::Gtk.Label ();
+		this.GtkLabel9.Name = "GtkLabel9";
+		this.GtkLabel9.LabelProp = global::Mono.Unix.Catalog.GetString ("<b>Scroll Geschwindigkeit</b>");
+		this.GtkLabel9.UseMarkup = true;
+		this.frame4.LabelWidget = this.GtkLabel9;
+		this.vbox3.Add (this.frame4);
+		global::Gtk.Box.BoxChild w29 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.frame4]));
+		w29.Position = 0;
+		w29.Expand = false;
+		w29.Fill = false;
+		this.vbox98.Add (this.vbox3);
+		global::Gtk.Box.BoxChild w30 = ((global::Gtk.Box.BoxChild)(this.vbox98 [this.vbox3]));
+		w30.Position = 1;
 		this.vbox1.Add (this.vbox98);
-		global::Gtk.Box.BoxChild w27 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.vbox98]));
-		w27.Position = 2;
-		w27.Expand = false;
-		w27.Fill = false;
+		global::Gtk.Box.BoxChild w31 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.vbox98]));
+		w31.Position = 2;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
 		}
 		this.DefaultWidth = 414;
-		this.DefaultHeight = 498;
+		this.DefaultHeight = 600;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.entry_address.Activated += new global::System.EventHandler (this.on_entry_address_activated);
@@ -350,6 +385,7 @@ public partial class MainWindow
 		this.combobox_font_time.Changed += new global::System.EventHandler (this.on_combobox_font_time_changed);
 		this.combobox_font_static_text.Changed += new global::System.EventHandler (this.on_combobox_font_static_text_changed);
 		this.entry_static_text.Changed += new global::System.EventHandler (this.on_entry_static_text_changed);
+		this.checkbutton_static_text_auto_scroll.Toggled += new global::System.EventHandler (this.on_togglebutton_static_text_auto_scroll_toggled);
 		this.hscale_x_pos.ValueChanged += new global::System.EventHandler (this.on_hscale_x_pos_changed);
 		this.vscale_y_pos.ValueChanged += new global::System.EventHandler (this.on_vscale_y_pos_changed);
 		this.hscale_shift_speed.ValueChanged += new global::System.EventHandler (this.hscale_shift_speed_changed);

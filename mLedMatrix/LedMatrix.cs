@@ -25,27 +25,29 @@ public class LedMatrix
 	
 	private volatile bool should_stop;
 	
-	private byte[] RED;
+	private byte[] RED; // raw data for transmission (line oriented)
 	private byte[] GREEN;
-	private UInt16[] led_columns_red;
-	private UInt16[] led_columns_green;
-	private UInt16[] led_columns_red_out;
-	private UInt16[] led_columns_green_out;
+	private UInt16[] led_columns_red; // data if shifting disabled
+	private UInt16[] led_columns_green; 
+	private UInt16[] led_columns_red_out; // data if shifting enabled
+	private UInt16[] led_columns_green_out; 
 	
 	int shift_position;
 	int max_line_length = 512;
 	int x;
 	int y;
-	public volatile int scroll_speed;
+	Fonts font;
+	public volatile int scroll_speed; // delay time when shifting
 	public volatile string static_text;
 	public volatile screen current_screen;
-	public volatile int static_text_x, static_text_y;
-	Fonts font;
-	public volatile string fontname;
+	public volatile int static_text_x, static_text_y; // offset for static text
+
+	public volatile bool force_redraw;
 	public volatile string fontname_time;
 	public volatile string fontname_static_text;
-	bool shift_override;
-	bool shift_active_static;
+	
+	public volatile bool shift_auto_enabled;
+	bool shift_enabled_by_length;
 	bool must_update;
 	
 	// networking stuff
@@ -67,6 +69,7 @@ public class LedMatrix
 		led_columns_red_out = new UInt16[max_line_length];
 		led_columns_green_out = new UInt16[max_line_length];
 		mutex_address = new Mutex();
+		shift_auto_enabled = false;
 		
 		shift_position = 0;
 		x = 0;
@@ -77,6 +80,7 @@ public class LedMatrix
 		current_screen = screen.time;
 		fontname_time = "8x12";
 		fontname_static_text = "8x12";
+		force_redraw = false;
 		
 		remoteEndPoint = new IPEndPoint(IPAddress.Parse(address), 9328);
 		client = new UdpClient();
@@ -87,8 +91,9 @@ public class LedMatrix
 	{
 		string time_string;
 		DateTime CurrTime = DateTime.Now;
-		x = 0; y = 3;
-		time_string = String.Format("  {0:00}:{1:00}:{2:00}",CurrTime.Hour,CurrTime.Minute,CurrTime.Second);
+		x = (64-font.stringWidth("00:00:00",fontname_time))/2;
+		y = 3;
+		time_string = String.Format("{0:00}:{1:00}:{2:00}",CurrTime.Hour,CurrTime.Minute,CurrTime.Second);
 		putString(time_string, fontname_time);
 		return true;
 	}
@@ -104,6 +109,7 @@ public class LedMatrix
 	
 	private void clearScreen()
 	{
+		shift_position = 0;
 		for(int i=0;i<max_line_length;i++)
 		{
 			led_columns_red[i] = 0;
@@ -118,40 +124,50 @@ public class LedMatrix
 		last_screen = screen.uninitialized;
 		while(!should_stop)
 		{
-			//shiftLeft(0);
 			switch(current_screen)
 			{
-				case screen.time:
+			case screen.time:
+				clearScreen();
+				if(screenTime())
+					must_update = true;
+					break;
+			case screen.empty:
+				if(last_screen != current_screen)
+				{
 					clearScreen();
-					if(screenTime())
-						must_update = true;
-					break;
-				case screen.empty:
-					if(last_screen != current_screen)
-					{
-						clearScreen();
-						must_update = true;
-					}
-					break;
-				case screen.static_text:
+					must_update = true;
+				}
+				break;
+			case screen.static_text:
+				if(last_screen != current_screen
+					|| force_redraw)
+				{
+					force_redraw = false;
 					clearScreen();
 					x = static_text_x;
 					y = static_text_y;
-					fontname = "8x8";
 					putString(static_text, fontname_static_text);
+					if(font.stringWidth(static_text, fontname_static_text) > 64
+						&& shift_auto_enabled)
+						shift_enabled_by_length = true;
+					else
+						shift_enabled_by_length = false;
+				}
+				if(shift_enabled_by_length)
+					shiftLeft(0);
+				must_update = true;
+				break;
+			case screen.all_on:
+				if(last_screen != current_screen)
+				{
+					clearScreen();
+					screenAllOn();
 					must_update = true;
-					break;
-				case screen.all_on:
-					if(last_screen != current_screen)
-					{
-						screenAllOn();
-						must_update = true;
-						Console.WriteLine("update");
-					}
-					break;					
+				}
+				break;					
 			}
 			last_screen = current_screen;
-			if(must_update)
+			if(must_update || shift_position != 0)
 			{
 				convert();
 				sendOut();
