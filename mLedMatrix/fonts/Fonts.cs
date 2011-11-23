@@ -651,7 +651,7 @@ public class Fonts
 		
 		for(int i=0;i<outarray.Length;i++)
 	    {
-	        width += charWidth(s[i], fontPointer)+1;
+	        width += charWidth(outarray[i], fontPointer)+1;
 	    }
 	    return width - 1; // undo last +1
 	}

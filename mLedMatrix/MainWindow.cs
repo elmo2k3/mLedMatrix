@@ -10,16 +10,19 @@ public partial class MainWindow : Gtk.Window
 	string led_matrix_address;
 	RegistryKey softwareKey;
 	RegistryKey rootKey;
+	Winamp_httpQ winamp;
 	
 	public MainWindow () : base(Gtk.WindowType.Toplevel)
 	{
 		Build ();
 		led_matrix = new LedMatrix("0.0.0.0");
 		led_matrix_thread = new Thread(led_matrix.Runner);
+		winamp = new Winamp_httpQ();
 		
 		//entry_address.ModifyBase(StateType.Normal, new Gdk.Color(255,0,0));
 		loadConfig();
 		led_matrix_thread.Start();
+		winamp.title_changed += led_matrix.setWinampPlaylisttitle;
 	}
 
 	private void loadConfig()
@@ -56,13 +59,13 @@ public partial class MainWindow : Gtk.Window
 			led_matrix.current_screen = screen.all_on;
 		}
 		entry_address.Text = led_matrix_address;
-		entry_static_text.Text = (string)softwareKey.GetValue("static_text");
+		//entry_static_text.Text = (string)softwareKey.GetValue("static_text");
 	}
 	
 	private void saveConfig()
 	{
 		softwareKey.SetValue("ip_address",entry_address.Text);
-		softwareKey.SetValue("static_text",entry_static_text.Text);
+		//softwareKey.SetValue("static_text",entry_static_text.Text);
 		if(radiobutton_time.Active)
 			softwareKey.SetValue("screen","time");
 		if(radiobutton_winamp.Active)
@@ -123,8 +126,7 @@ public partial class MainWindow : Gtk.Window
 	
 	protected virtual void on_entry_static_text_changed (object sender, System.EventArgs e)
 	{
-		led_matrix.static_text = entry_static_text.Text;
-		led_matrix.force_redraw = true;
+		
 	}
 		
 	protected virtual void on_hscale_x_pos_changed (object sender, System.EventArgs e)
@@ -167,6 +169,15 @@ public partial class MainWindow : Gtk.Window
 		led_matrix.shift_auto_enabled = checkbutton_static_text_auto_scroll.Active;
 		led_matrix.force_redraw = true;
 		//throw new System.NotImplementedException ();
+	}
+
+	protected void static_text_changed (object o, Gtk.KeyReleaseEventArgs args)
+	{
+		//led_matrix.static_text = entry_static_text.Text;
+		TextBuffer buffer;
+		buffer = textview_static_text.Buffer;
+		led_matrix.static_text = buffer.Text;
+		led_matrix.force_redraw = true;
 	}
 }
 
