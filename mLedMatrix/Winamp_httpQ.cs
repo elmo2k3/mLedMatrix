@@ -17,8 +17,10 @@ public class Winamp_httpQ
 	public string playlisttitle;
 	public bool running;
 	
-	public delegate void TitleChangedEventHandler(string playlisttitle);
-	public event TitleChangedEventHandler title_changed;
+	public delegate void TitleChangedEventHandler(bool plaing, string playlisttitle);
+	public event TitleChangedEventHandler title_changed_handler;
+	public delegate void StatusChangedEventHandler(bool playing, string playlisttitle);
+	public event StatusChangedEventHandler status_changed_handler;
 	
 	Timer wa_timer;
 		
@@ -34,18 +36,34 @@ public class Winamp_httpQ
 		
 		wa_timer.Start();
 		playlisttitle = null;
+		running = false;
 	}
 	
 	private void wa_update(object sender, EventArgs e)
 	{
 		string temp_string;
+		bool temp_running;
 		//temp_string = wa_command("isplaying","");
+		temp_string = wa_command("isplaying","");
+		if(temp_string == "1")
+			temp_running = true;
+		else
+			temp_running = false;
+		if(running != temp_running)
+		{
+			running = temp_running;
+			Console.WriteLine("Status changed to"+temp_running.ToString());
+			if(status_changed_handler != null)
+			{
+				status_changed_handler(running,"");
+			}
+		}
 		temp_string = wa_command("getplaylisttitle","");
 		if(playlisttitle != temp_string)
 		{
-			if(title_changed != null)
+			if(title_changed_handler != null)
 			{
-				title_changed(temp_string);
+				title_changed_handler(running,temp_string);
 			}
 			playlisttitle = temp_string;
 		}

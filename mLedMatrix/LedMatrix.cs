@@ -10,16 +10,6 @@ enum colors
 	amber
 };
 
-public enum screen
-{
-	time,
-	winamp,
-	empty,
-	static_text,
-	all_on,
-	uninitialized
-};
-
 public class LedMatrix
 {
 	
@@ -36,35 +26,26 @@ public class LedMatrix
 	int max_line_length = 512;
 	int x;
 	int y;
-	Fonts font;
+	public Fonts font;
 	public volatile int scroll_speed; // delay time when shifting
-	public volatile string static_text;
-	public volatile screen current_screen;
-	public volatile int static_text_x, static_text_y; // offset for static text
-	
-	public volatile string winamp_text;
-
-	public volatile bool force_redraw;
-	public volatile string fontname_time;
-	public volatile string fontname_static_text;
+	public volatile string led_matrix_string;
+	private volatile string artist;
+	private volatile string title;
 	
 	public volatile bool shift_auto_enabled;
-	bool shift_enabled_by_length;
-	bool must_update;
-	private colors color = colors.red;
 	
 	// networking stuff
 	IPEndPoint remoteEndPoint;
     UdpClient client;
 	private string address;
 	private Mutex mutex_address;
-	screen last_screen;
 	
-	public void setWinampPlaylisttitle(string text)
+	public void setWinampPlaylisttitle(bool isplaying, string text)
 	{
-		force_redraw = true;
-		winamp_text = text;
-		Console.WriteLine(text);
+		string []artist_title;
+		artist_title = text.Split(new char[] {'-'});
+		artist = artist_title[0].Trim();
+		title = artist_title[1].Trim();
 	}
 	
 	public LedMatrix (string _address)
@@ -83,44 +64,21 @@ public class LedMatrix
 		
 		shift_position = 0;
 		x = 0;
-		y = -2;
-		static_text_x = 0;
-		static_text_y = 1;
+		y = 1;
 		scroll_speed = 10;
-		current_screen = screen.time;
-		fontname_time = "8x12";
-		fontname_static_text = "8x12";
-		force_redraw = false;
+		artist = "";
+		title = "";
 		
 		remoteEndPoint = new IPEndPoint(IPAddress.Parse(address), 9328);
 		client = new UdpClient();
 		client.Client.ReceiveTimeout = 1000; // 1s timeout -> receive blocks 5s
 	}
 	
-	private bool screenTime()
-	{
-		string time_string;
-		DateTime CurrTime = DateTime.Now;
-		time_string = String.Format("{0:00}:{1:0}0:00",CurrTime.Hour,(int)(CurrTime.Minute/10));
-		x = (64-font.stringWidth(time_string,fontname_time))/2;
-		y = 3;
-		time_string = String.Format("{0:00}:{1:00}:{2:00}",CurrTime.Hour,CurrTime.Minute,CurrTime.Second);
-		putString(time_string, fontname_time);
-		return true;
-	}
-	
-	private void screenAllOn()
-	{
-		for(int i=0;i<max_line_length;i++)
-		{
-			led_columns_red[i] = 65535;
-			led_columns_green[i] = 65535;
-		}
-	}
-	
 	private void clearScreen()
 	{
 		//shift_position = 0;
+		x = 0;
+		y = 1;
 		for(int i=0;i<max_line_length;i++)
 		{
 			led_columns_red[i] = 0;
@@ -132,83 +90,24 @@ public class LedMatrix
 	
 	public void Runner()
 	{
-		last_screen = screen.uninitialized;
 		while(!should_stop)
 		{
-			switch(current_screen)
-			{
-			case screen.time:
-				clearScreen();
-				if(screenTime())
-					must_update = true;
-					break;
-			case screen.empty:
-				if(last_screen != current_screen)
-				{
-					clearScreen();
-					must_update = true;
-				}
-				break;
-			case screen.winamp:
-				if(last_screen != current_screen
-					|| force_redraw)
-				{
-					string[] artist_title;
-					
-					if(winamp_text != null)
-					{
-						artist_title = winamp_text.Split(new char [] {'-'});
-						force_redraw = false;
-						clearScreen();
-						x = 0;
-						y = 1;
-						putString('\r'+artist_title[0]+'\a'+"- "+artist_title[1], "8x12");
-						if(font.stringWidth(winamp_text, "8x12") > 64
-							&& shift_auto_enabled)
-							shift_enabled_by_length = true;
-						else
-							shift_enabled_by_length = false;
-					}
-				}
-				if(shift_enabled_by_length)
-					shiftLeft(0);
-				must_update = true;
-				break;				
-			case screen.static_text:
-				if(last_screen != current_screen
-					|| force_redraw)
-				{
-					force_redraw = false;
-					clearScreen();
-					x = static_text_x;
-					y = static_text_y;
-					putString(static_text, fontname_static_text);
-					if(font.stringWidth(static_text, fontname_static_text) > 64
-						&& shift_auto_enabled)
-						shift_enabled_by_length = true;
-					else
-						shift_enabled_by_length = false;
-				}
-				if(shift_enabled_by_length)
-					shiftLeft(0);
-				must_update = true;
-				break;
-			case screen.all_on:
-				if(last_screen != current_screen)
-				{
-					clearScreen();
-					screenAllOn();
-					must_update = true;
-				}
-				break;					
-			}
-			last_screen = current_screen;
-			if(must_update || shift_position != 0)
-			{
-				convert();
-				sendOut();
-				must_update = false;
-			}
+			clearScreen();
+			putString(led_matrix_string);
+			if(x>64)
+				shiftLeft(0);
+			else
+				shift_position = 0;
+			/*if(font.stringWidth(static_text, fontname_static_text) > 64
+				&& shift_auto_enabled)
+				shift_enabled_by_length = true;
+			else
+				shift_enabled_by_length = false;
+			*/
+			//if(shift_enabled_by_length)
+			//	shiftLeft(0);
+			convert();
+			sendOut();
 			Thread.Sleep(scroll_speed);
 		}
 		Console.WriteLine("worker thread: stopped...");
@@ -270,7 +169,7 @@ public class LedMatrix
 	    {
 	        if(shift_position + counter > scroll_length - 1)
 	        {
-	            if(section == 0)
+	            if(section == 0) // all 16 lines
 	            {
 	                led_columns_red_out[counter] = led_columns_red[counter + shift_position - (scroll_length)];
 	                led_columns_green_out[counter] = led_columns_green[counter + shift_position - (scroll_length)];
@@ -335,7 +234,6 @@ public class LedMatrix
 		}
 		catch(SocketException)
 		{
-			last_screen = screen.uninitialized;
 			Console.WriteLine("Timeout");
 		}
 		mutex_address.ReleaseMutex();
@@ -373,16 +271,79 @@ public class LedMatrix
 	    return true;
 	}
 	
-	private string parseString(string s)
+	public int stringWidth(string s, string fontname)
 	{
-		string substring;
 		string replacement_string;
-		char []char_array;
-		char []foo;
+		string char_array;
 		int i;
-		int new_length;
+		int width;
 		
-		char_array = s.ToCharArray();
+		if(s == null)
+			return 0;
+		
+		width = 0;
+		char_array = s;
+		for(i=0;i<char_array.Length;i++)
+		{
+			if(char_array[i] == '%')
+			{
+				if(i+1 == char_array.Length)
+					continue; // get out of the for loop
+				else
+				{
+					replacement_string = "";
+					
+					if(char_array[i+1] == 'h') // time hours
+						replacement_string = String.Format("{0:00}",DateTime.Now.Hour);
+					else if(char_array[i+1] == 'm') // time minutes
+						replacement_string = String.Format("{0:00}",DateTime.Now.Minute);
+					else if(char_array[i+1] == 's') // time seconds (not for length)
+						replacement_string = "00";
+					else if(char_array[i+1] == 'D') // Day of month
+						replacement_string = String.Format("{0:0}",DateTime.Now.Day);
+					else if(char_array[i+1] == 'M') // Month of year
+						replacement_string = String.Format("{0:0}",DateTime.Now.Month);
+					else if(char_array[i+1] == 'Y') // Year
+						replacement_string = String.Format("{0:0}",DateTime.Now.Year);
+					else if(char_array[i+1] == 'a') // Artist
+						replacement_string = artist;
+					else if(char_array[i+1] == 't') // Title
+						replacement_string = title;
+					else if(char_array[i+1] == '8') // font8x8
+						fontname = "8x8";
+					else if(char_array[i+1] == '2') // font8x12
+						fontname = "8x12";
+					
+					for(int p=0;p<replacement_string.Length;p++)
+					{
+						width += font.charWidth(replacement_string[p],fontname)+1;
+					}
+					i++;
+				}
+			}
+			else if(char_array[i] == '\r' || char_array[i] == '\n')
+				break;
+			else
+				width += font.charWidth(char_array[i],fontname)+1;
+		}
+		return width-1;
+	}
+	
+	private void putString(string s)
+	{
+		string replacement_string;
+		string char_array;
+		int i;
+		string fontname = "8x8";
+		colors color;
+		
+		color = colors.red;
+		
+		if(s == null)
+			return;
+		
+		
+		char_array = s;
 		for(i=0;i<char_array.Length;i++)
 		{
 			if(char_array[i] == '%')
@@ -405,53 +366,40 @@ public class LedMatrix
 						replacement_string = String.Format("{0:0}",DateTime.Now.Month);
 					else if(char_array[i+1] == 'Y') // Year
 						replacement_string = String.Format("{0:0}",DateTime.Now.Year);
+					else if(char_array[i+1] == 'a') // Artist
+						replacement_string = artist;
+					else if(char_array[i+1] == 't') // Title
+						replacement_string = title;
 					else if(char_array[i+1] == 'r') // color red
-						replacement_string = "\r";
+						color = colors.red;
 					else if(char_array[i+1] == 'g') // color green
-						replacement_string = "\b";
+						color = colors.green;
 					else if(char_array[i+1] == 'o') // color amber
-						replacement_string = "\a";
-					
-					if(replacement_string != "")
+						color = colors.amber;
+					else if(char_array[i+1] == '8') // font8x8
+						fontname = "8x8";
+					else if(char_array[i+1] == '2') // font8x12
+						fontname = "8x12";
+					else if(char_array[i+1] == '-') // decrement y
+						y--;
+					else if(char_array[i+1] == '+') // increment y
+						y++;
+					else if(char_array[i+1] == 'c') // center
 					{
-						foo = s.ToCharArray(0,i);
-						substring = new string(foo) + replacement_string;
-						new_length = substring.Length - (i+2);
-						foo = s.ToCharArray(i+2,char_array.Length - (i+2));
-						substring += new string(foo);
-						char_array = substring.ToCharArray();
-						s = substring;
-						i += new_length;
+						x = (64-stringWidth(char_array.Substring(i+2),fontname))/2;
+						if(x<0) x = 0;
 					}
+					
+					for(int p=0;p<replacement_string.Length;p++)
+					{
+						putChar(replacement_string[p],color,fontname);
+					}
+					i++;
 				}
 			}
-					
+			else
+				putChar(char_array[i],color,fontname);
 		}
-		return new string(char_array);
-	}
-		
-	public void putString(string outstring, string fontname)
-	{
-		char [] outarray;
-		if(outstring == null)
-			return;
-		
-		outstring = parseString(outstring);
-		outarray = outstring.ToCharArray();
-
-		for(int i=0;i<outarray.Length;i++)
-	    {
-			if(outarray[i] == '\b')
-				color = colors.green;
-			else if(outarray[i] == '\r')
-				color = colors.red;
-			else if(outarray[i] == '\a')
-				color = colors.amber;
-	        else if(!putChar(outarray[i],color,fontname))
-	        {
-	            return;
-	        }
-	    }
 	}
 	
 	public bool setAddress(string address)
@@ -461,7 +409,6 @@ public class LedMatrix
 			mutex_address.WaitOne();
 			remoteEndPoint.Address = IPAddress.Parse(address);
 			mutex_address.ReleaseMutex();
-			last_screen = screen.uninitialized;
 		}
 		catch(FormatException ex)
 		{

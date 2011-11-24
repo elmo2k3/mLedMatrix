@@ -592,13 +592,21 @@ public class Fonts
 		return real_length-zero_offset;
 	}
 	
-	private int charWidth(char c, font fontPointer)
+	public int charWidth(char c, string fontname)
 	{
 		int i;
 		int char_width;
 	    int char_height;
 		int real_length;
 		int zero_offset;
+		
+		font fontPointer = font8x12;
+		
+		if(fontname == "8x12")
+			fontPointer = font8x12;
+		else if(fontname == "8x8")
+			fontPointer = font8x8;
+		
 		
 		char_width = fontPointer.width;
 		char_height = fontPointer.heigth;
@@ -632,7 +640,7 @@ public class Fonts
 		return real_length-zero_offset;
 	}
 	
-	public int stringWidth(string s, string font_name)
+	/*public int stringWidth(string s, string font_name)
 	{
 	    int width = 0;
 		char []outarray;
@@ -645,14 +653,15 @@ public class Fonts
 			fontPointer = font8x8;
 		
 	    if(s == null)
-	        outarray = "null".ToCharArray();
-		else
-			outarray = s.ToCharArray();
+	        return 0;
+		outarray = s.ToCharArray();
 		
 		for(int i=0;i<outarray.Length;i++)
 	    {
+			if(outarray[i] == '\r' || outarray[i] == '\n')
+				break;
 	        width += charWidth(outarray[i], fontPointer)+1;
 	    }
 	    return width - 1; // undo last +1
-	}
+	}*/
 }

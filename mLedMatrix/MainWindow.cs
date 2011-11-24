@@ -11,6 +11,7 @@ public partial class MainWindow : Gtk.Window
 	RegistryKey softwareKey;
 	RegistryKey rootKey;
 	Winamp_httpQ winamp;
+	StatusIcon tray_icon;
 	
 	public MainWindow () : base(Gtk.WindowType.Toplevel)
 	{
@@ -18,11 +19,17 @@ public partial class MainWindow : Gtk.Window
 		led_matrix = new LedMatrix("0.0.0.0");
 		led_matrix_thread = new Thread(led_matrix.Runner);
 		winamp = new Winamp_httpQ();
+		tray_icon = new StatusIcon(new Gdk.Pixbuf("icon.png"));
+		tray_icon.Visible = true;
+		tray_icon.Tooltip = "LedMatrix Control";
+		tray_icon.Activate += delegate { this.Visible = !this.Visible; };
 		
 		//entry_address.ModifyBase(StateType.Normal, new Gdk.Color(255,0,0));
 		loadConfig();
 		led_matrix_thread.Start();
-		winamp.title_changed += led_matrix.setWinampPlaylisttitle;
+		winamp.title_changed_handler += led_matrix.setWinampPlaylisttitle;
+		winamp.title_changed_handler += set_winamp;
+		winamp.status_changed_handler += set_winamp;
 	}
 
 	private void loadConfig()
@@ -36,35 +43,33 @@ public partial class MainWindow : Gtk.Window
 		if((string)softwareKey.GetValue("screen") == "time")
 		{
 			radiobutton_time.Active = true;
-			led_matrix.current_screen = screen.time;
 		}
 		if((string)softwareKey.GetValue("screen") == "winamp")
 		{
 			radiobutton_winamp.Active = true;
-			led_matrix.current_screen = screen.winamp;
 		}
 		if((string)softwareKey.GetValue("screen") == "void")
 		{
 			radiobutton_void.Active = true;
-			led_matrix.current_screen = screen.empty;
 		}
 		if((string)softwareKey.GetValue("screen") == "static_text")
 		{
 			radiobutton_static_text.Active = true;
-			led_matrix.current_screen = screen.static_text;
 		}
 		if((string)softwareKey.GetValue("screen") == "all_on")
 		{
 			radiobutton_all.Active = true;
-			led_matrix.current_screen = screen.all_on;
 		}
 		entry_address.Text = led_matrix_address;
+		led_matrix.scroll_speed = (int)softwareKey.GetValue("scroll_speed",10);
+		hscale_shift_speed.Value = led_matrix.scroll_speed;
 		//entry_static_text.Text = (string)softwareKey.GetValue("static_text");
 	}
 	
 	private void saveConfig()
 	{
 		softwareKey.SetValue("ip_address",entry_address.Text);
+		softwareKey.SetValue("scroll_speed",led_matrix.scroll_speed);
 		//softwareKey.SetValue("static_text",entry_static_text.Text);
 		if(radiobutton_time.Active)
 			softwareKey.SetValue("screen","time");
@@ -100,75 +105,52 @@ public partial class MainWindow : Gtk.Window
 		led_matrix.scroll_speed =(int)hscale_shift_speed.Value;
 	}
 	
-	protected virtual void on_entry_static_text_activated (object sender, System.EventArgs e)
-	{
-	}
-	
 	protected virtual void radiobutton_time_toggled (object sender, System.EventArgs e)
 	{
-		led_matrix.current_screen = screen.time;
+		led_matrix.led_matrix_string = "%c%r%2%+%+%h:%m:%s";
+	}
+	
+	private void set_winamp(bool playing, string playlisttitle)
+	{
+		if(playing == false)
+		{
+			led_matrix.led_matrix_string = "%c%r%2%+%+%h:%m:%s";
+			//radiobutton_time.Active = true;
+		}
+		else
+		{
+			//radiobutton_winamp.Active = true;
+			if(led_matrix.stringWidth("%a","8x8") <= 64 &&
+				led_matrix.stringWidth("%t","8x8") <= 64)
+			{
+				led_matrix.led_matrix_string = "%8%c%r%r%a\n%c%g%t";
+			}
+			else
+				led_matrix.led_matrix_string = "%2%+%+%r%a %o- %g%t";
+		}
 	}
 	
 	protected virtual void radiobutton_winamp_toggled (object sender, System.EventArgs e)
 	{
-		led_matrix.current_screen = screen.winamp;
+		set_winamp(true,"");
 	}
 	
 	protected virtual void radiobutton_void_toggled (object sender, System.EventArgs e)
 	{
-		led_matrix.current_screen = screen.empty;
+		led_matrix.led_matrix_string = "";
 	}
 	
 	protected virtual void radiobutton_static_text_toggled (object sender, System.EventArgs e)
 	{
-		led_matrix.current_screen = screen.static_text;
+		TextBuffer buffer;
+		buffer = textview_static_text.Buffer;
+		led_matrix.led_matrix_string = buffer.Text;
 	}
 	
-	protected virtual void on_entry_static_text_changed (object sender, System.EventArgs e)
-	{
-		
-	}
-		
-	protected virtual void on_hscale_x_pos_changed (object sender, System.EventArgs e)
-	{
-		led_matrix.static_text_x = (int)hscale_x_pos.Value;
-		led_matrix.force_redraw = true;
-	}
-	
-	protected virtual void on_vscale_y_pos_changed (object sender, System.EventArgs e)
-	{
-		led_matrix.static_text_y = (int)vscale_y_pos.Value;
-		led_matrix.force_redraw = true;
-	}
 	
 	protected virtual void on_radiobutton_all_toggled (object sender, System.EventArgs e)
 	{
-		led_matrix.current_screen = screen.all_on;
-	}
-	
-	protected void on_combobox_font_time_changed (object sender, System.EventArgs e)
-	{
-		if(combobox_font_time.ActiveText == "Font8x12")
-			led_matrix.fontname_time = "8x12";
-		else if(combobox_font_time.ActiveText == "Font8x8")
-			led_matrix.fontname_time = "8x8";
-		
-	}
-	
-	protected void on_combobox_font_static_text_changed (object sender, System.EventArgs e)
-	{
-		if(combobox_font_static_text.ActiveText == "Font8x12")
-			led_matrix.fontname_static_text = "8x12";
-		else if(combobox_font_static_text.ActiveText == "Font8x8")
-			led_matrix.fontname_static_text = "8x8";
-		led_matrix.force_redraw = true;
-	}
-
-	protected void on_togglebutton_static_text_auto_scroll_toggled (object sender, System.EventArgs e)
-	{
-		led_matrix.shift_auto_enabled = checkbutton_static_text_auto_scroll.Active;
-		led_matrix.force_redraw = true;
-		//throw new System.NotImplementedException ();
+		//led_matrix.current_screen = screen.all_on;
 	}
 
 	protected void static_text_changed (object o, Gtk.KeyReleaseEventArgs args)
@@ -176,8 +158,7 @@ public partial class MainWindow : Gtk.Window
 		//led_matrix.static_text = entry_static_text.Text;
 		TextBuffer buffer;
 		buffer = textview_static_text.Buffer;
-		led_matrix.static_text = buffer.Text;
-		led_matrix.force_redraw = true;
+		led_matrix.led_matrix_string = buffer.Text;
 	}
 }
 
