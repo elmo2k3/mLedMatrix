@@ -872,12 +872,16 @@ public class Fonts
 		else if(fontname == "4x6")
 			fontPointer = font4x6;
 		
-		if(c == 'ü')
-			return charWidth('u',fontname) + charWidth('e',fontname);
-		if(c == 'ä')
-			return charWidth('a',fontname) + charWidth('e',fontname);
-		if(c == 'ö')
-			return charWidth('o',fontname) + charWidth('e',fontname);
+		switch(c)
+		{
+		case 'ü': return charWidth('u',fontname) + charWidth('e',fontname);
+		case 'Ü': return charWidth('U',fontname) + charWidth('e',fontname);
+		case 'ä': return charWidth('a',fontname) + charWidth('e',fontname);
+		case 'Ä': return charWidth('A',fontname) + charWidth('e',fontname);
+		case 'ö': return charWidth('o',fontname) + charWidth('e',fontname);
+		case 'Ö': return charWidth('O',fontname) + charWidth('e',fontname);
+		case 'ß': return charWidth('s',fontname) + charWidth('s',fontname);
+		}
 		
 		char_width = fontPointer.width;
 		char_height = fontPointer.heigth;

@@ -285,25 +285,15 @@ public class LedMatrix
 	        return true;
 	    }
 		
-		if(c == 'ü')
+		switch(c)
 		{
-			putChar('u',color,fontname);
-			c = 'e';
-		}
-		else if(c == 'ä')
-		{
-			putChar('a',color,fontname);
-			c = 'e';
-		}
-		else if(c == 'ö')
-		{
-			putChar('o',color,fontname);
-			c = 'e';
-		}
-		else if(c == 'ß')
-		{
-			putChar('s',color,fontname);
-			c = 's';
+		case 'ü': putChar('u',color,fontname); c = 'e'; break;
+		case 'Ü': putChar('U',color,fontname); c = 'e'; break;
+		case 'ä': putChar('a',color,fontname); c = 'e'; break;
+		case 'Ä': putChar('A',color,fontname); c = 'e'; break;
+		case 'ö': putChar('o',color,fontname); c = 'e'; break;
+		case 'Ö': putChar('O',color,fontname); c = 'e'; break;
+		case 'ß': putChar('s',color,fontname); c = 's'; break;
 		}
 	    
 		if(color == colors.red)
