@@ -10,6 +10,14 @@ enum colors
 	amber
 };
 
+enum what_to_shift
+{
+	nothing,
+	first_line,
+	second_line,
+	all
+}
+
 public class LedMatrix
 {
 	
@@ -23,7 +31,7 @@ public class LedMatrix
 	private UInt16[] led_columns_green_out; 
 	
 	int shift_position;
-	int max_line_length = 512;
+	int max_line_length = 50000;
 	int x;
 	int y;
 	public Fonts font;
@@ -31,14 +39,21 @@ public class LedMatrix
 	public volatile string led_matrix_string;
 	private volatile string artist;
 	private volatile string title;
+	private volatile bool connected;
+	private volatile bool connected_before;
+	private int []line_lengths;
+	public RssPlugin rss;
 	
 	public volatile bool shift_auto_enabled;
+	
+	public delegate void StatusConnectedChangedHandler(bool connected);
+	public event StatusConnectedChangedHandler connection_status_changed_handler;
 	
 	// networking stuff
 	IPEndPoint remoteEndPoint;
     UdpClient client;
 	private string address;
-	private Mutex mutex_address;
+	private static Mutex mutex_address = new Mutex();
 	
 	public void setWinampPlaylisttitle(bool isplaying, string text)
 	{
@@ -59,9 +74,10 @@ public class LedMatrix
 		led_columns_green = new UInt16[max_line_length];
 		led_columns_red_out = new UInt16[max_line_length];
 		led_columns_green_out = new UInt16[max_line_length];
-		mutex_address = new Mutex();
 		shift_auto_enabled = false;
+		line_lengths = new int[2];
 		
+		connected_before = false;
 		shift_position = 0;
 		x = 0;
 		y = 1;
@@ -72,6 +88,7 @@ public class LedMatrix
 		remoteEndPoint = new IPEndPoint(IPAddress.Parse(address), 9328);
 		client = new UdpClient();
 		client.Client.ReceiveTimeout = 1000; // 1s timeout -> receive blocks 5s
+
 	}
 	
 	private void clearScreen()
@@ -93,19 +110,11 @@ public class LedMatrix
 		while(!should_stop)
 		{
 			clearScreen();
-			putString(led_matrix_string);
-			if(x>64)
+			shiftLeft(putString(led_matrix_string));
+			/*if(x>64)
 				shiftLeft(0);
 			else
-				shift_position = 0;
-			/*if(font.stringWidth(static_text, fontname_static_text) > 64
-				&& shift_auto_enabled)
-				shift_enabled_by_length = true;
-			else
-				shift_enabled_by_length = false;
-			*/
-			//if(shift_enabled_by_length)
-			//	shiftLeft(0);
+				shift_position = 0;*/
 			convert();
 			sendOut();
 			Thread.Sleep(scroll_speed);
@@ -155,33 +164,45 @@ public class LedMatrix
 		}
 	}
 	
-	private bool shiftLeft(int section)
+	private bool shiftLeft(what_to_shift section)
 	{
 	    int counter;
 	    int scroll_length;
+		int ref_length;
 	    
-	    if(x + 11 > max_line_length)
+		if(section == what_to_shift.nothing)
+		{
+			shift_position = 0;
+			return true;
+		}
+		
+		if(section == what_to_shift.first_line)
+			ref_length = line_lengths[0];
+		else
+			ref_length = x;
+		
+	    if(ref_length + 11 > max_line_length)
 	        scroll_length = max_line_length;
 	    else
-	        scroll_length = x + 11;
+	        scroll_length = ref_length + 11;
 	
 	    for(counter=0;counter< scroll_length - 1;counter++)
 	    {
 	        if(shift_position + counter > scroll_length - 1)
 	        {
-	            if(section == 0) // all 16 lines
+	            if(section == what_to_shift.all) // all 16 lines
 	            {
 	                led_columns_red_out[counter] = led_columns_red[counter + shift_position - (scroll_length)];
 	                led_columns_green_out[counter] = led_columns_green[counter + shift_position - (scroll_length)];
 	            }
-	            else if(section == 1) // upper 8 lines
+	            else if(section == what_to_shift.first_line) // upper 8 lines
 	            {
 	                led_columns_red_out[counter] = (UInt16)(led_columns_red[counter + shift_position - (scroll_length)] & 0xFF);
 	                led_columns_red_out[counter] |= (UInt16)(led_columns_red[counter] & 0xFF00);
 					led_columns_green_out[counter] = (UInt16)(led_columns_green[counter + shift_position - (scroll_length)] & 0xFF);
 	                led_columns_green_out[counter] |= (UInt16)(led_columns_green[counter] & 0xFF00);
 	            }
-	            else if(section == 2) // lower 8 lines
+	            else if(section == what_to_shift.second_line) // lower 8 lines
 	            {
 	                led_columns_red_out[counter] = (UInt16)(led_columns_red[counter + shift_position - (scroll_length)] & 0xFF00);
 	                led_columns_red_out[counter] |= (UInt16)(led_columns_red[counter] & 0xFF);
@@ -191,19 +212,19 @@ public class LedMatrix
 	        }
 	        else
 	        {
-	            if(section == 0)
+	            if(section == what_to_shift.all) // all 16 lines
 	            {
 	                led_columns_red_out[counter] = led_columns_red[shift_position+counter];
 	                led_columns_green_out[counter] = led_columns_green[shift_position+counter];
 	            }
-	            else if(section == 1)
+	            else if(section == what_to_shift.first_line) // upper 8 lines
 	            {
 	                led_columns_red_out[counter] = (UInt16)(led_columns_red[shift_position+counter] & 0xFF);
 	                led_columns_red_out[counter] |= (UInt16)(led_columns_red[counter] & 0xFF00);
 	                led_columns_green_out[counter] = (UInt16)(led_columns_green[shift_position+counter] & 0xFF);
 	                led_columns_green_out[counter] |= (UInt16)(led_columns_green[counter] & 0xFF00);
 	            }
-	            else if(section == 2)
+	            else if(section == what_to_shift.second_line) // lower 8 lines
 	            {
 	                led_columns_red_out[counter] = (UInt16)(led_columns_red[shift_position+counter] & 0xFF00);
 	                led_columns_red_out[counter] |= (UInt16)(led_columns_red[counter] & 0xFF);
@@ -215,7 +236,7 @@ public class LedMatrix
 	
 	    shift_position++;
 	    
-	    if(shift_position > x + 11)
+	    if(shift_position > ref_length + 11)
 	    {
 	        shift_position = 1;
 	        return false;
@@ -226,6 +247,7 @@ public class LedMatrix
 	private void sendOut()
 	{
 		mutex_address.WaitOne();
+		connected = true;
 		try
 		{
 			client.Send(RED,64*2, remoteEndPoint);
@@ -234,7 +256,16 @@ public class LedMatrix
 		}
 		catch(SocketException)
 		{
+			connected = false;
 			Console.WriteLine("Timeout");
+		}
+		if(connected != connected_before)
+		{
+			connected_before = connected;
+			if(connection_status_changed_handler != null)
+			{
+				connection_status_changed_handler(connected);
+			}
 		}
 		mutex_address.ReleaseMutex();
 	}
@@ -253,6 +284,27 @@ public class LedMatrix
 	        x += 3;
 	        return true;
 	    }
+		
+		if(c == 'ü')
+		{
+			putChar('u',color,fontname);
+			c = 'e';
+		}
+		else if(c == 'ä')
+		{
+			putChar('a',color,fontname);
+			c = 'e';
+		}
+		else if(c == 'ö')
+		{
+			putChar('o',color,fontname);
+			c = 'e';
+		}
+		else if(c == 'ß')
+		{
+			putChar('s',color,fontname);
+			c = 's';
+		}
 	    
 		if(color == colors.red)
 	    	retVal = font.putChar(ref led_columns_red, ref x, ref y, c, fontname);
@@ -305,14 +357,25 @@ public class LedMatrix
 						replacement_string = String.Format("{0:0}",DateTime.Now.Month);
 					else if(char_array[i+1] == 'Y') // Year
 						replacement_string = String.Format("{0:0}",DateTime.Now.Year);
+					else if(char_array[i+1] == 'R') // RSS
+					{
+						for(int p=0;p<rss.num_titles;p++)
+						{
+							replacement_string += rss.titles[p] + " / ";
+						}
+					}
 					else if(char_array[i+1] == 'a') // Artist
 						replacement_string = artist;
 					else if(char_array[i+1] == 't') // Title
 						replacement_string = title;
 					else if(char_array[i+1] == '8') // font8x8
 						fontname = "8x8";
+					else if(char_array[i+1] == '1') // font4x6
+						fontname = "4x6";
 					else if(char_array[i+1] == '2') // font8x12
 						fontname = "8x12";
+					else if(char_array[i+1] == 'n') // newline
+						break;
 					
 					for(int p=0;p<replacement_string.Length;p++)
 					{
@@ -329,21 +392,24 @@ public class LedMatrix
 		return width-1;
 	}
 	
-	private void putString(string s)
+	private what_to_shift putString(string s)
 	{
 		string replacement_string;
 		string char_array;
 		int i;
 		string fontname = "8x8";
 		colors color;
+		bool two_lines;
+		
 		
 		color = colors.red;
 		
 		if(s == null)
-			return;
+			return what_to_shift.nothing;
 		
-		
+		two_lines = false;
 		char_array = s;
+		line_lengths[0] = stringWidth(char_array,fontname); // this is the first line
 		for(i=0;i<char_array.Length;i++)
 		{
 			if(char_array[i] == '%')
@@ -366,6 +432,13 @@ public class LedMatrix
 						replacement_string = String.Format("{0:0}",DateTime.Now.Month);
 					else if(char_array[i+1] == 'Y') // Year
 						replacement_string = String.Format("{0:0}",DateTime.Now.Year);
+					else if(char_array[i+1] == 'R') // RSS
+					{
+						for(int p=0;p<rss.num_titles;p++)
+						{
+							replacement_string += rss.titles[p] + " / ";
+						}
+					}
 					else if(char_array[i+1] == 'a') // Artist
 						replacement_string = artist;
 					else if(char_array[i+1] == 't') // Title
@@ -378,12 +451,22 @@ public class LedMatrix
 						color = colors.amber;
 					else if(char_array[i+1] == '8') // font8x8
 						fontname = "8x8";
+					else if(char_array[i+1] == '1') // font4x6
+						fontname = "4x6";
 					else if(char_array[i+1] == '2') // font8x12
 						fontname = "8x12";
 					else if(char_array[i+1] == '-') // decrement y
 						y--;
 					else if(char_array[i+1] == '+') // increment y
 						y++;
+					else if(char_array[i+1] == 'n') // newline
+					{
+						two_lines = true;
+						line_lengths[1] = stringWidth(char_array.Substring(i+2),fontname); // second line
+						replacement_string = "\n";
+					}
+					else if(char_array[i+1] == 'b')
+						putBar(color);
 					else if(char_array[i+1] == 'c') // center
 					{
 						x = (64-stringWidth(char_array.Substring(i+2),fontname))/2;
@@ -400,6 +483,40 @@ public class LedMatrix
 			else
 				putChar(char_array[i],color,fontname);
 		}
+		if(line_lengths[0] < 65 && two_lines == false) // one line, no shift
+		{
+			return what_to_shift.nothing;
+		}
+		else if(line_lengths[0] > 64 && two_lines == false) // one line, shift all
+		{
+			return what_to_shift.all;
+		}
+		else if(line_lengths[0] > 64 && line_lengths[1] < 65) // two lines, shift first
+		{
+			return what_to_shift.first_line;
+		}
+		else if(line_lengths[0] < 65 && line_lengths[1] > 65) // two lines shift second
+		{
+			return what_to_shift.second_line;
+		}
+		else // two lines both too long
+		{
+			return what_to_shift.nothing;
+		}
+	}
+	
+	private void putBar(colors color)
+	{
+		if(color == colors.red)
+			led_columns_red[x] = 65535;
+		else if(color == colors.green)
+			led_columns_green[x] = 65535;
+		else
+		{
+			led_columns_red[x] = 65535;
+			led_columns_green[x] = 65535;
+		}
+		x++;
 	}
 	
 	public bool setAddress(string address)
@@ -415,7 +532,6 @@ public class LedMatrix
 			Console.WriteLine(ex);
 			return false;
 		}
-		
 		return true;
 	}
 	

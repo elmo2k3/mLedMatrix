@@ -52,6 +52,7 @@
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Mono.Posix" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -67,9 +68,16 @@
     <Compile Include="LedMatrix.cs" />
     <Compile Include="fonts\Fonts.cs" />
     <Compile Include="Winamp_httpQ.cs" />
+    <Compile Include="RssPlugin.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="fonts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.png">
+      <DeployService-UseProjectRelativePath>true</DeployService-UseProjectRelativePath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

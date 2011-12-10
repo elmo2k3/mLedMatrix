@@ -21,6 +21,8 @@ public class Winamp_httpQ
 	public event TitleChangedEventHandler title_changed_handler;
 	public delegate void StatusChangedEventHandler(bool playing, string playlisttitle);
 	public event StatusChangedEventHandler status_changed_handler;
+	public delegate void ConnectionChangedEventHandler(bool connected);
+	public event ConnectionChangedEventHandler connection_changed_handler;
 	
 	Timer wa_timer;
 		
@@ -80,7 +82,7 @@ public class Winamp_httpQ
 		wa_request = (HttpWebRequest)WebRequest.Create
 			("http://"+winamp_address+":"+winamp_port.ToString()+"/"+
 				command+"?p="+winamp_pass);
-		wa_request.Timeout = 100;
+		wa_request.Timeout = 1000;
 		
 		try
 		{
@@ -88,8 +90,12 @@ public class Winamp_httpQ
 		}
 		catch
 		{
+			if(connection_changed_handler != null)
+				connection_changed_handler(false);
 			return null;
 		}
+		if(connection_changed_handler != null)
+				connection_changed_handler(true);
 		
 		Stream resStream = wa_response.GetResponseStream();
 		
