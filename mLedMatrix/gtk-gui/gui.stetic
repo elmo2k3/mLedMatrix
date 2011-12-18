@@ -8,7 +8,7 @@
     <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <widget-library name="../bin/Debug/mLedMatrix.exe" internal="true" />
   </import>
-  <widget class="Gtk.Window" id="MainWindow" design-size="672 620">
+  <widget class="Gtk.Window" id="MainWindow" design-size="694 709">
     <property name="MemberName" />
     <property name="Title" translatable="yes">MainWindow</property>
     <property name="WindowPosition">CenterOnParent</property>
@@ -648,6 +648,24 @@
                 <property name="MemberName" />
                 <property name="Spacing">6</property>
                 <child>
+                  <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow">
+                    <property name="MemberName" />
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.TreeView" id="treeview2">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="ShowScrollbars">True</property>
+                        <property name="Reorderable">True</property>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="Position">0</property>
+                    <property name="AutoSize">True</property>
+                  </packing>
+                </child>
+                <child>
                   <widget class="Gtk.Frame" id="frame4">
                     <property name="MemberName" />
                     <property name="ShadowType">None</property>
@@ -676,14 +694,11 @@
                     </child>
                   </widget>
                   <packing>
-                    <property name="Position">0</property>
+                    <property name="Position">1</property>
                     <property name="AutoSize">True</property>
                     <property name="Expand">False</property>
                     <property name="Fill">False</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder />
                 </child>
               </widget>
               <packing>
@@ -706,10 +721,9 @@
 %g	Grün
 %r	Rot
 %o	Orange
-%8	Schrift klein
-%2	Schrift gross
 %n	Zeilenumbruch
-%+	Ein Pixel Tiefer
+%+	Ein Pixel tiefer
+%-	Ein Pixel höher
 
 %h	Stunde
 %m	Minute
@@ -722,7 +736,12 @@
 %a	Artist
 %t	Title
 
-%R	RSS Feed</property>
+%R	RSS Feed
+%2%T Tree
+
+%1	Schrift mini
+%8	Schrift klein
+%2	Schrift gross</property>
           </widget>
           <packing>
             <property name="Position">1</property>

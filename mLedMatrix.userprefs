@@ -1,11 +1,11 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="mLedMatrix/fonts/Fonts.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="mLedMatrix/MainWindow.cs">
     <Files>
-      <File FileName="mLedMatrix/Main.cs" Line="1" Column="1" />
-      <File FileName="mLedMatrix/MainWindow.cs" Line="1" Column="1" />
-      <File FileName="mLedMatrix/LedMatrix.cs" Line="455" Column="24" />
-      <File FileName="mLedMatrix/fonts/Fonts.cs" Line="874" Column="3" />
+      <File FileName="mLedMatrix/Main.cs" Line="21" Column="1" />
+      <File FileName="mLedMatrix/MainWindow.cs" Line="52" Column="50" />
+      <File FileName="mLedMatrix/LedMatrix.cs" Line="360" Column="33" />
+      <File FileName="mLedMatrix/fonts/Fonts.cs" Line="534" Column="8" />
       <File FileName="mLedMatrix/Winamp_httpQ.cs" Line="1" Column="1" />
       <File FileName="mLedMatrix/RssPlugin.cs" Line="1" Column="1" />
     </Files>

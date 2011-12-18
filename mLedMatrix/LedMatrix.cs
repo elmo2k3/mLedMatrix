@@ -356,6 +356,8 @@ public class LedMatrix
 					}
 					else if(char_array[i+1] == 'a') // Artist
 						replacement_string = artist;
+					else if(char_array[i+1] == 'T') // Christmas Tree
+						replacement_string = "\xff";
 					else if(char_array[i+1] == 't') // Title
 						replacement_string = title;
 					else if(char_array[i+1] == '8') // font8x8
@@ -431,6 +433,8 @@ public class LedMatrix
 					}
 					else if(char_array[i+1] == 'a') // Artist
 						replacement_string = artist;
+					else if(char_array[i+1] == 'T') // Christmas Tree
+						replacement_string = "\xff";
 					else if(char_array[i+1] == 't') // Title
 						replacement_string = title;
 					else if(char_array[i+1] == 'r') // color red

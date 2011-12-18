@@ -37,6 +37,8 @@ public partial class MainWindow
 	private global::Gtk.RadioButton radiobutton_winamp;
 	private global::Gtk.Label GtkLabel8;
 	private global::Gtk.VBox vbox98;
+	private global::Gtk.ScrolledWindow GtkScrolledWindow;
+	private global::Gtk.TreeView treeview2;
 	private global::Gtk.Frame frame4;
 	private global::Gtk.HScale hscale_shift_speed;
 	private global::Gtk.Label GtkLabel10;
@@ -393,6 +395,19 @@ public partial class MainWindow
 		this.vbox98.Name = "vbox98";
 		this.vbox98.Spacing = 6;
 		// Container child vbox98.Gtk.Box+BoxChild
+		this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
+		this.GtkScrolledWindow.Name = "GtkScrolledWindow";
+		this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
+		// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
+		this.treeview2 = new global::Gtk.TreeView ();
+		this.treeview2.CanFocus = true;
+		this.treeview2.Name = "treeview2";
+		this.treeview2.Reorderable = true;
+		this.GtkScrolledWindow.Add (this.treeview2);
+		this.vbox98.Add (this.GtkScrolledWindow);
+		global::Gtk.Box.BoxChild w31 = ((global::Gtk.Box.BoxChild)(this.vbox98 [this.GtkScrolledWindow]));
+		w31.Position = 0;
+		// Container child vbox98.Gtk.Box+BoxChild
 		this.frame4 = new global::Gtk.Frame ();
 		this.frame4.Name = "frame4";
 		this.frame4.ShadowType = ((global::Gtk.ShadowType)(0));
@@ -413,33 +428,33 @@ public partial class MainWindow
 		this.GtkLabel10.UseMarkup = true;
 		this.frame4.LabelWidget = this.GtkLabel10;
 		this.vbox98.Add (this.frame4);
-		global::Gtk.Box.BoxChild w31 = ((global::Gtk.Box.BoxChild)(this.vbox98 [this.frame4]));
-		w31.Position = 0;
-		w31.Expand = false;
-		w31.Fill = false;
-		this.vbox1.Add (this.vbox98);
-		global::Gtk.Box.BoxChild w32 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.vbox98]));
-		w32.Position = 2;
-		this.hbox2.Add (this.vbox1);
-		global::Gtk.Box.BoxChild w33 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.vbox1]));
-		w33.Position = 0;
+		global::Gtk.Box.BoxChild w33 = ((global::Gtk.Box.BoxChild)(this.vbox98 [this.frame4]));
+		w33.Position = 1;
 		w33.Expand = false;
 		w33.Fill = false;
+		this.vbox1.Add (this.vbox98);
+		global::Gtk.Box.BoxChild w34 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.vbox98]));
+		w34.Position = 2;
+		this.hbox2.Add (this.vbox1);
+		global::Gtk.Box.BoxChild w35 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.vbox1]));
+		w35.Position = 0;
+		w35.Expand = false;
+		w35.Fill = false;
 		// Container child hbox2.Gtk.Box+BoxChild
 		this.label1 = new global::Gtk.Label ();
 		this.label1.Name = "label1";
-		this.label1.LabelProp = global::Mono.Unix.Catalog.GetString ("%c\tCenter\n%g\tGrün\n%r\tRot\n%o\tOrange\n%8\tSchrift klein\n%2\tSchrift gross\n%n\tZeilenumbruch\n%+\tEin Pixel Tiefer\n\n%h\tStunde\n%m\tMinute\n%s\tSekunde\n\n%D\tTag\n%M\tMonat\n%Y\tJahr\n\n%a\tArtist\n%t\tTitle\n\n%R\tRSS Feed");
+		this.label1.LabelProp = global::Mono.Unix.Catalog.GetString ("%c\tCenter\n%g\tGrün\n%r\tRot\n%o\tOrange\n%n\tZeilenumbruch\n%+\tEin Pixel tiefer\n%-\tEin Pixel höher\n\n%h\tStunde\n%m\tMinute\n%s\tSekunde\n\n%D\tTag\n%M\tMonat\n%Y\tJahr\n\n%a\tArtist\n%t\tTitle\n\n%R\tRSS Feed\n%2%T Tree\n\n%1\tSchrift mini\n%8\tSchrift klein\n%2\tSchrift gross");
 		this.hbox2.Add (this.label1);
-		global::Gtk.Box.BoxChild w34 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.label1]));
-		w34.Position = 1;
-		w34.Expand = false;
-		w34.Fill = false;
+		global::Gtk.Box.BoxChild w36 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.label1]));
+		w36.Position = 1;
+		w36.Expand = false;
+		w36.Fill = false;
 		this.Add (this.hbox2);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
 		}
-		this.DefaultWidth = 672;
-		this.DefaultHeight = 620;
+		this.DefaultWidth = 694;
+		this.DefaultHeight = 709;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.entry_rss.Activated += new global::System.EventHandler (this.on_entry_rss_activated);

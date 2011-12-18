@@ -49,7 +49,7 @@ public partial class MainWindow : Gtk.Window
 		text_time_default = "%c%r%2%+%+%h:%m:%s";
 		text_winamp_default = "%8%c%r%r%a%n%c%g%t";
 		text_winamp_2_default = "%2%+%+%r%a %o- %g%t";
-		text_static_default = "Test";
+		text_static_default = "%c%r%8%h:%m:%s%n%8%g%-%R";
 		
 		loadConfig();
 		led_matrix.connection_status_changed_handler += led_matrix_connection_changed;
