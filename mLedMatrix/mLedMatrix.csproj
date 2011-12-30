@@ -69,6 +69,16 @@
     <Compile Include="fonts\Fonts.cs" />
     <Compile Include="Winamp_httpQ.cs" />
     <Compile Include="RssPlugin.cs" />
+    <Compile Include="libmpc\Enum.cs" />
+    <Compile Include="libmpc\Exception.cs" />
+    <Compile Include="libmpc\Mpc.cs" />
+    <Compile Include="libmpc\MpcConnection.cs" />
+    <Compile Include="libmpc\MpdDirectoryListing.cs" />
+    <Compile Include="libmpc\MpdFile.cs" />
+    <Compile Include="libmpc\MpdOutput.cs" />
+    <Compile Include="libmpc\MpdResponse.cs" />
+    <Compile Include="libmpc\MpdStatistics.cs" />
+    <Compile Include="libmpc\MpdStatus.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -79,5 +89,8 @@
       <DeployService-UseProjectRelativePath>true</DeployService-UseProjectRelativePath>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libmpc\Libmpc.net-doc.chm" />
   </ItemGroup>
 </Project>

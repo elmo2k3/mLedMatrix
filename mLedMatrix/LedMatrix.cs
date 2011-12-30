@@ -258,6 +258,7 @@ public class LedMatrix
 		{
 			connected = false;
 			Console.WriteLine("Timeout");
+			Thread.Sleep(2000);
 		}
 		if(connected != connected_before)
 		{

@@ -3,15 +3,29 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="mLedMatrix/MainWindow.cs">
     <Files>
       <File FileName="mLedMatrix/Main.cs" Line="21" Column="1" />
-      <File FileName="mLedMatrix/MainWindow.cs" Line="52" Column="50" />
-      <File FileName="mLedMatrix/LedMatrix.cs" Line="360" Column="33" />
-      <File FileName="mLedMatrix/fonts/Fonts.cs" Line="534" Column="8" />
+      <File FileName="mLedMatrix/LedMatrix.cs" Line="3" Column="1" />
+      <File FileName="mLedMatrix/fonts/Fonts.cs" Line="1" Column="1" />
       <File FileName="mLedMatrix/Winamp_httpQ.cs" Line="1" Column="1" />
       <File FileName="mLedMatrix/RssPlugin.cs" Line="1" Column="1" />
+      <File FileName="mLedMatrix/libmpc/Mpc.cs" Line="1" Column="1" />
+      <File FileName="mLedMatrix/MainWindow.cs" Line="249" Column="17" />
+      <File FileName="mLedMatrix/libmpc/MpcConnection.cs" Line="133" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="mLedMatrix" expanded="True">
+            <Node name="libmpc" expanded="True" />
+            <Node name="MainWindow.cs" selected="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="mLedMatrix/MainWindow.cs" line="65" offsetX="130" offsetY="960" expression="mpc_endpoint" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>
