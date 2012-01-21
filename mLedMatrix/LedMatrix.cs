@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2011-2012 Bjoern Biesenbach <bjoern@bjoern-b.de>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
 using System;
 using System.Threading;
 using System.Net;
@@ -342,6 +360,8 @@ public class LedMatrix
 						replacement_string = String.Format("{0:00}",DateTime.Now.Minute);
 					else if(char_array[i+1] == 's') // time seconds (not for length)
 						replacement_string = "00";
+					else if(char_array[i+1] == 'S') // time seconds (not for length)
+						replacement_string = "00";
 					else if(char_array[i+1] == 'D') // Day of month
 						replacement_string = String.Format("{0:0}",DateTime.Now.Day);
 					else if(char_array[i+1] == 'M') // Month of year
@@ -419,6 +439,8 @@ public class LedMatrix
 						replacement_string = String.Format("{0:00}",DateTime.Now.Minute);
 					else if(char_array[i+1] == 's') // time seconds
 						replacement_string = String.Format("{0:00}",DateTime.Now.Second);
+					else if(char_array[i+1] == 'S') // time seconds
+						replacement_string = String.Format("{0:00}",59-DateTime.Now.Second);
 					else if(char_array[i+1] == 'D') // Day of month
 						replacement_string = String.Format("{0:0}",DateTime.Now.Day);
 					else if(char_array[i+1] == 'M') // Month of year

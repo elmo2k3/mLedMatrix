@@ -2,22 +2,18 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.Workbench ActiveDocument="mLedMatrix/MainWindow.cs">
     <Files>
-      <File FileName="mLedMatrix/Main.cs" Line="21" Column="1" />
-      <File FileName="mLedMatrix/LedMatrix.cs" Line="3" Column="1" />
-      <File FileName="mLedMatrix/fonts/Fonts.cs" Line="1" Column="1" />
-      <File FileName="mLedMatrix/Winamp_httpQ.cs" Line="1" Column="1" />
-      <File FileName="mLedMatrix/RssPlugin.cs" Line="1" Column="1" />
+      <File FileName="mLedMatrix/Main.cs" Line="18" Column="4" />
+      <File FileName="mLedMatrix/fonts/Fonts.cs" Line="19" Column="1" />
       <File FileName="mLedMatrix/libmpc/Mpc.cs" Line="1" Column="1" />
-      <File FileName="mLedMatrix/MainWindow.cs" Line="249" Column="17" />
-      <File FileName="mLedMatrix/libmpc/MpcConnection.cs" Line="133" Column="1" />
+      <File FileName="mLedMatrix/userLinesTable.cs" Line="18" Column="4" />
+      <File FileName="mLedMatrix/MainWindow.cs" Line="84" Column="69" />
+      <File FileName="mLedMatrix/RssPlugin.cs" Line="19" Column="1" />
+      <File FileName="mLedMatrix/Winamp_httpQ.cs" Line="65" Column="21" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="mLedMatrix" expanded="True">
-            <Node name="libmpc" expanded="True" />
-            <Node name="MainWindow.cs" selected="True" />
-          </Node>
+          <Node name="mLedMatrix" expanded="True" />
         </State>
       </Pad>
     </Pads>

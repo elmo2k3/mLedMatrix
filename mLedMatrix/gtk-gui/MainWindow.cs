@@ -10,6 +10,7 @@ public partial class MainWindow
 	private global::Gtk.Button button_address_ok;
 	private global::Gtk.CheckButton checkbutton_loop;
 	private global::Gtk.Entry entry_address;
+	private global::Gtk.Entry entry_mpd;
 	private global::Gtk.Entry entry_winamp_address;
 	private global::Gtk.Entry entry_winamp_pass;
 	private global::Gtk.Entry entry_winamp_port;
@@ -18,6 +19,7 @@ public partial class MainWindow
 	private global::Gtk.Label label2;
 	private global::Gtk.Label label3;
 	private global::Gtk.Label label4;
+	private global::Gtk.Label label5;
 	private global::Gtk.Label GtkLabel2;
 	private global::Gtk.ScrolledWindow GtkScrolledWindow;
 	private global::Gtk.TreeView treeview2;
@@ -89,6 +91,22 @@ public partial class MainWindow
 		w3.RightAttach = ((uint)(2));
 		w3.YOptions = ((global::Gtk.AttachOptions)(4));
 		// Container child table2.Gtk.Table+TableChild
+		this.entry_mpd = new global::Gtk.Entry ();
+		this.entry_mpd.CanFocus = true;
+		this.entry_mpd.Name = "entry_mpd";
+		this.entry_mpd.Text = global::Mono.Unix.Catalog.GetString ("localhost");
+		this.entry_mpd.IsEditable = true;
+		this.entry_mpd.InvisibleChar = '•';
+		this.entry_mpd.Xalign = 1F;
+		this.table2.Add (this.entry_mpd);
+		global::Gtk.Table.TableChild w4 = ((global::Gtk.Table.TableChild)(this.table2 [this.entry_mpd]));
+		w4.TopAttach = ((uint)(3));
+		w4.BottomAttach = ((uint)(4));
+		w4.LeftAttach = ((uint)(1));
+		w4.RightAttach = ((uint)(2));
+		w4.XOptions = ((global::Gtk.AttachOptions)(4));
+		w4.YOptions = ((global::Gtk.AttachOptions)(4));
+		// Container child table2.Gtk.Table+TableChild
 		this.entry_winamp_address = new global::Gtk.Entry ();
 		this.entry_winamp_address.CanFocus = true;
 		this.entry_winamp_address.Name = "entry_winamp_address";
@@ -97,13 +115,13 @@ public partial class MainWindow
 		this.entry_winamp_address.InvisibleChar = '•';
 		this.entry_winamp_address.Xalign = 1F;
 		this.table2.Add (this.entry_winamp_address);
-		global::Gtk.Table.TableChild w4 = ((global::Gtk.Table.TableChild)(this.table2 [this.entry_winamp_address]));
-		w4.TopAttach = ((uint)(1));
-		w4.BottomAttach = ((uint)(2));
-		w4.LeftAttach = ((uint)(1));
-		w4.RightAttach = ((uint)(2));
-		w4.XOptions = ((global::Gtk.AttachOptions)(4));
-		w4.YOptions = ((global::Gtk.AttachOptions)(4));
+		global::Gtk.Table.TableChild w5 = ((global::Gtk.Table.TableChild)(this.table2 [this.entry_winamp_address]));
+		w5.TopAttach = ((uint)(1));
+		w5.BottomAttach = ((uint)(2));
+		w5.LeftAttach = ((uint)(1));
+		w5.RightAttach = ((uint)(2));
+		w5.XOptions = ((global::Gtk.AttachOptions)(4));
+		w5.YOptions = ((global::Gtk.AttachOptions)(4));
 		// Container child table2.Gtk.Table+TableChild
 		this.entry_winamp_pass = new global::Gtk.Entry ();
 		this.entry_winamp_pass.CanFocus = true;
@@ -113,13 +131,13 @@ public partial class MainWindow
 		this.entry_winamp_pass.InvisibleChar = '•';
 		this.entry_winamp_pass.Xalign = 1F;
 		this.table2.Add (this.entry_winamp_pass);
-		global::Gtk.Table.TableChild w5 = ((global::Gtk.Table.TableChild)(this.table2 [this.entry_winamp_pass]));
-		w5.TopAttach = ((uint)(2));
-		w5.BottomAttach = ((uint)(3));
-		w5.LeftAttach = ((uint)(1));
-		w5.RightAttach = ((uint)(2));
-		w5.XOptions = ((global::Gtk.AttachOptions)(4));
-		w5.YOptions = ((global::Gtk.AttachOptions)(4));
+		global::Gtk.Table.TableChild w6 = ((global::Gtk.Table.TableChild)(this.table2 [this.entry_winamp_pass]));
+		w6.TopAttach = ((uint)(2));
+		w6.BottomAttach = ((uint)(3));
+		w6.LeftAttach = ((uint)(1));
+		w6.RightAttach = ((uint)(2));
+		w6.XOptions = ((global::Gtk.AttachOptions)(4));
+		w6.YOptions = ((global::Gtk.AttachOptions)(4));
 		// Container child table2.Gtk.Table+TableChild
 		this.entry_winamp_port = new global::Gtk.Entry ();
 		this.entry_winamp_port.WidthRequest = 80;
@@ -130,13 +148,13 @@ public partial class MainWindow
 		this.entry_winamp_port.MaxLength = 5;
 		this.entry_winamp_port.InvisibleChar = '•';
 		this.table2.Add (this.entry_winamp_port);
-		global::Gtk.Table.TableChild w6 = ((global::Gtk.Table.TableChild)(this.table2 [this.entry_winamp_port]));
-		w6.TopAttach = ((uint)(1));
-		w6.BottomAttach = ((uint)(2));
-		w6.LeftAttach = ((uint)(3));
-		w6.RightAttach = ((uint)(4));
-		w6.XOptions = ((global::Gtk.AttachOptions)(4));
-		w6.YOptions = ((global::Gtk.AttachOptions)(4));
+		global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table2 [this.entry_winamp_port]));
+		w7.TopAttach = ((uint)(1));
+		w7.BottomAttach = ((uint)(2));
+		w7.LeftAttach = ((uint)(3));
+		w7.RightAttach = ((uint)(4));
+		w7.XOptions = ((global::Gtk.AttachOptions)(4));
+		w7.YOptions = ((global::Gtk.AttachOptions)(4));
 		// Container child table2.Gtk.Table+TableChild
 		this.hscale_shift_speed = new global::Gtk.HScale (null);
 		this.hscale_shift_speed.CanFocus = true;
@@ -148,53 +166,63 @@ public partial class MainWindow
 		this.hscale_shift_speed.Digits = 0;
 		this.hscale_shift_speed.ValuePos = ((global::Gtk.PositionType)(2));
 		this.table2.Add (this.hscale_shift_speed);
-		global::Gtk.Table.TableChild w7 = ((global::Gtk.Table.TableChild)(this.table2 [this.hscale_shift_speed]));
-		w7.TopAttach = ((uint)(5));
-		w7.BottomAttach = ((uint)(6));
-		w7.LeftAttach = ((uint)(1));
-		w7.RightAttach = ((uint)(2));
-		w7.XOptions = ((global::Gtk.AttachOptions)(4));
-		w7.YOptions = ((global::Gtk.AttachOptions)(4));
+		global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.table2 [this.hscale_shift_speed]));
+		w8.TopAttach = ((uint)(5));
+		w8.BottomAttach = ((uint)(6));
+		w8.LeftAttach = ((uint)(1));
+		w8.RightAttach = ((uint)(2));
+		w8.XOptions = ((global::Gtk.AttachOptions)(4));
+		w8.YOptions = ((global::Gtk.AttachOptions)(4));
 		// Container child table2.Gtk.Table+TableChild
 		this.label_address = new global::Gtk.Label ();
 		this.label_address.Name = "label_address";
 		this.label_address.LabelProp = global::Mono.Unix.Catalog.GetString ("Ledmatrix Adresse");
 		this.table2.Add (this.label_address);
-		global::Gtk.Table.TableChild w8 = ((global::Gtk.Table.TableChild)(this.table2 [this.label_address]));
-		w8.XOptions = ((global::Gtk.AttachOptions)(4));
-		w8.YOptions = ((global::Gtk.AttachOptions)(4));
+		global::Gtk.Table.TableChild w9 = ((global::Gtk.Table.TableChild)(this.table2 [this.label_address]));
+		w9.XOptions = ((global::Gtk.AttachOptions)(4));
+		w9.YOptions = ((global::Gtk.AttachOptions)(4));
 		// Container child table2.Gtk.Table+TableChild
 		this.label2 = new global::Gtk.Label ();
 		this.label2.Name = "label2";
 		this.label2.LabelProp = global::Mono.Unix.Catalog.GetString ("Winamp Adresse");
 		this.table2.Add (this.label2);
-		global::Gtk.Table.TableChild w9 = ((global::Gtk.Table.TableChild)(this.table2 [this.label2]));
-		w9.TopAttach = ((uint)(1));
-		w9.BottomAttach = ((uint)(2));
-		w9.XOptions = ((global::Gtk.AttachOptions)(4));
-		w9.YOptions = ((global::Gtk.AttachOptions)(4));
+		global::Gtk.Table.TableChild w10 = ((global::Gtk.Table.TableChild)(this.table2 [this.label2]));
+		w10.TopAttach = ((uint)(1));
+		w10.BottomAttach = ((uint)(2));
+		w10.XOptions = ((global::Gtk.AttachOptions)(4));
+		w10.YOptions = ((global::Gtk.AttachOptions)(4));
 		// Container child table2.Gtk.Table+TableChild
 		this.label3 = new global::Gtk.Label ();
 		this.label3.Name = "label3";
 		this.label3.LabelProp = global::Mono.Unix.Catalog.GetString ("Winamp Pass");
 		this.table2.Add (this.label3);
-		global::Gtk.Table.TableChild w10 = ((global::Gtk.Table.TableChild)(this.table2 [this.label3]));
-		w10.TopAttach = ((uint)(2));
-		w10.BottomAttach = ((uint)(3));
-		w10.XOptions = ((global::Gtk.AttachOptions)(4));
-		w10.YOptions = ((global::Gtk.AttachOptions)(4));
+		global::Gtk.Table.TableChild w11 = ((global::Gtk.Table.TableChild)(this.table2 [this.label3]));
+		w11.TopAttach = ((uint)(2));
+		w11.BottomAttach = ((uint)(3));
+		w11.XOptions = ((global::Gtk.AttachOptions)(4));
+		w11.YOptions = ((global::Gtk.AttachOptions)(4));
 		// Container child table2.Gtk.Table+TableChild
 		this.label4 = new global::Gtk.Label ();
 		this.label4.Name = "label4";
 		this.label4.LabelProp = global::Mono.Unix.Catalog.GetString (":");
 		this.table2.Add (this.label4);
-		global::Gtk.Table.TableChild w11 = ((global::Gtk.Table.TableChild)(this.table2 [this.label4]));
-		w11.TopAttach = ((uint)(1));
-		w11.BottomAttach = ((uint)(2));
-		w11.LeftAttach = ((uint)(2));
-		w11.RightAttach = ((uint)(3));
-		w11.XOptions = ((global::Gtk.AttachOptions)(4));
-		w11.YOptions = ((global::Gtk.AttachOptions)(4));
+		global::Gtk.Table.TableChild w12 = ((global::Gtk.Table.TableChild)(this.table2 [this.label4]));
+		w12.TopAttach = ((uint)(1));
+		w12.BottomAttach = ((uint)(2));
+		w12.LeftAttach = ((uint)(2));
+		w12.RightAttach = ((uint)(3));
+		w12.XOptions = ((global::Gtk.AttachOptions)(4));
+		w12.YOptions = ((global::Gtk.AttachOptions)(4));
+		// Container child table2.Gtk.Table+TableChild
+		this.label5 = new global::Gtk.Label ();
+		this.label5.Name = "label5";
+		this.label5.LabelProp = global::Mono.Unix.Catalog.GetString ("Mpd Adresse");
+		this.table2.Add (this.label5);
+		global::Gtk.Table.TableChild w13 = ((global::Gtk.Table.TableChild)(this.table2 [this.label5]));
+		w13.TopAttach = ((uint)(3));
+		w13.BottomAttach = ((uint)(4));
+		w13.XOptions = ((global::Gtk.AttachOptions)(4));
+		w13.YOptions = ((global::Gtk.AttachOptions)(4));
 		this.GtkAlignment.Add (this.table2);
 		this.frame1.Add (this.GtkAlignment);
 		this.GtkLabel2 = new global::Gtk.Label ();
@@ -203,10 +231,10 @@ public partial class MainWindow
 		this.GtkLabel2.UseMarkup = true;
 		this.frame1.LabelWidget = this.GtkLabel2;
 		this.vbox1.Add (this.frame1);
-		global::Gtk.Box.BoxChild w14 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.frame1]));
-		w14.Position = 0;
-		w14.Expand = false;
-		w14.Fill = false;
+		global::Gtk.Box.BoxChild w16 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.frame1]));
+		w16.Position = 0;
+		w16.Expand = false;
+		w16.Fill = false;
 		// Container child vbox1.Gtk.Box+BoxChild
 		this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
 		this.GtkScrolledWindow.WidthRequest = 600;
@@ -220,28 +248,29 @@ public partial class MainWindow
 		this.treeview2.Reorderable = true;
 		this.GtkScrolledWindow.Add (this.treeview2);
 		this.vbox1.Add (this.GtkScrolledWindow);
-		global::Gtk.Box.BoxChild w16 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.GtkScrolledWindow]));
-		w16.Position = 1;
+		global::Gtk.Box.BoxChild w18 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.GtkScrolledWindow]));
+		w18.Position = 1;
 		// Container child vbox1.Gtk.Box+BoxChild
 		this.label1 = new global::Gtk.Label ();
 		this.label1.Name = "label1";
 		this.label1.LabelProp = global::Mono.Unix.Catalog.GetString ("%c\tCenter\t\t\t%h\tStunde\t\t%a\tArtist\n%g\tGrün\t\t\t%m\tMinute\t\t%t\tTitle\n%r\tRot\t\t\t\t%s\tSekunde\t\t%2%T Tree\n%o\tOrange\t\t\t\t\t\t\t%R\tRSS Feed\n%n\tZeilenumbruch\t%D\tTag\t\t\t%1\tSchrift mini\n%+\tEin Pixel tiefer\t%M\tMonat\t\t%8\tSchrift klein\n%-\tEin Pixel höher\t%Y\tJahr\t\t\t%2\tSchrift gross");
 		this.vbox1.Add (this.label1);
-		global::Gtk.Box.BoxChild w17 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.label1]));
-		w17.Position = 2;
-		w17.Expand = false;
-		w17.Fill = false;
+		global::Gtk.Box.BoxChild w19 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.label1]));
+		w19.Position = 2;
+		w19.Expand = false;
+		w19.Fill = false;
 		this.Add (this.vbox1);
 		if ((this.Child != null)) {
 			this.Child.ShowAll ();
 		}
 		this.DefaultWidth = 737;
-		this.DefaultHeight = 603;
+		this.DefaultHeight = 624;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.hscale_shift_speed.ValueChanged += new global::System.EventHandler (this.hscale_shift_speed_changed);
+		this.entry_mpd.Activated += new global::System.EventHandler (this.on_entry_mpd_activated);
 		this.entry_address.Activated += new global::System.EventHandler (this.on_entry_address_activated);
-		this.checkbutton_loop.Toggled += new global::System.EventHandler (this.on_checkbox_loop_toggled);
+		this.checkbutton_loop.Clicked += new global::System.EventHandler (this.on_checkbutton_loop_clicked);
 		this.button_address_ok.Clicked += new global::System.EventHandler (this.on_entry_address_activated);
 	}
 }

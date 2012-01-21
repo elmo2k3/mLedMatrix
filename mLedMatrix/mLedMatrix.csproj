@@ -79,6 +79,7 @@
     <Compile Include="libmpc\MpdResponse.cs" />
     <Compile Include="libmpc\MpdStatistics.cs" />
     <Compile Include="libmpc\MpdStatus.cs" />
+    <Compile Include="userLinesTable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -92,5 +93,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="libmpc\Libmpc.net-doc.chm" />
+    <None Include="COPYING" />
   </ItemGroup>
 </Project>
